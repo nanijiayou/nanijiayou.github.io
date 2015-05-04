@@ -2,12 +2,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>nani&#39;personal blog</title>
-    <description>我的要博客简单有内容。
+    <description>我的要博客简单专注有内容。
 </description>
     <link>http://nanijiayou.github.io/</link>
     <atom:link href="http://nanijiayou.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 04 May 2015 15:22:57 +0800</pubDate>
-    <lastBuildDate>Mon, 04 May 2015 15:22:57 +0800</lastBuildDate>
+    <pubDate>Mon, 04 May 2015 16:51:50 +0800</pubDate>
+    <lastBuildDate>Mon, 04 May 2015 16:51:50 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -30,6 +30,23 @@
         <pubDate>Mon, 04 May 2015 21:26:49 +0800</pubDate>
         <link>http://nanijiayou.github.io/jekyll/update/2015/05/04/welcome-to-jekyll.html</link>
         <guid isPermaLink="true">http://nanijiayou.github.io/jekyll/update/2015/05/04/welcome-to-jekyll.html</guid>
+        
+        
+        <category>jekyll</category>
+        
+        <category>update</category>
+        
+      </item>
+    
+      <item>
+        <title>the first post!</title>
+        <description>&lt;p&gt;这是first post
+… 从下面的截图可以看到：
+&lt;img src=&quot;http://nanijiayou.github.io/assets/images/1.jpg&quot; alt=&quot;有帮助的截图&quot; /&gt;&lt;/p&gt;
+</description>
+        <pubDate>Mon, 04 May 2015 00:00:00 +0800</pubDate>
+        <link>http://nanijiayou.github.io/jekyll/update/2015/05/04/post-the-first-blog.html</link>
+        <guid isPermaLink="true">http://nanijiayou.github.io/jekyll/update/2015/05/04/post-the-first-blog.html</guid>
         
         
         <category>jekyll</category>
