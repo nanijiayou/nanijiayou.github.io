@@ -2,13 +2,141 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>nani</title>
-    <description>我的要博客简单专注有内容。
+    <description>简单,专注,有内容。
 </description>
-    <link>http://nanijiayou.github.io/</link>
-    <atom:link href="http://nanijiayou.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 04 May 2015 23:29:56 +0800</pubDate>
-    <lastBuildDate>Mon, 04 May 2015 23:29:56 +0800</lastBuildDate>
+    <link>http://localhost:4000/</link>
+    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 05 May 2015 22:25:17 +0800</pubDate>
+    <lastBuildDate>Tue, 05 May 2015 22:25:17 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>githubpage + jekyll 搭建自己的博客——简单,专注博文本身</title>
+        <description>&lt;p&gt;在github上搭建个人博客是个很有争议的话题，在知乎上也有看到 &lt;a href=&quot;http://www.zhihu.com/question/20717014&quot;&gt;使用 GitHub Pages 来做博客是否道德？&lt;/a&gt; 这类问题。其实道不道德完全在你自己，github本身就是一个开放，分享，交流的平台。如果你的博客本身的目的就是记录分享，这完全符合github的期望，就完全没必要纠结这样的问题。但如果你的目的是商业用途，你完全可以购买github的服务，而不让自己有这种道德包袱。&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;http://jekyllcn.com/&quot;&gt;jekyll&lt;/a&gt;用来搭建博客，是很有意思的一种体验，不同wordpress，Ghost，jekyll的所有内容都是静态的，不需要数据库，NO 数据库,使用起来也很简单,但这都它最吸引我的，它最吸引我的是它专注的是博客内容本身，就像这样：&lt;a href=&quot;http://tom.preston-werner.com/&quot;&gt;tom.preston-werner&lt;/a&gt;，让你的博客更有质量而不是看起来更漂亮，而这正是体验其他博客之后发现自己真正想要的。&lt;/p&gt;
+
+&lt;p&gt;好了，说怎样搭吧:&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;准备工作&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;在正式搭建之前，这些基础条件你必需要有的：你先要有github帐号，本地装好了git，而且你的本地的git已经成功链接githug；这个过程很简单，先github注册帐号，然后本地装git，最后是建立链接，因为git可以使用的ssh协议，所以你本地生成公钥，提交给github，然后在设置一下帐号信息就好了，相信很多同学都是github的用户，都很熟悉这些了。如果还有疑问可以看这篇文章。&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;github新建仓库：&lt;/strong&gt;既然要利用githug的page搭建博客，当然先要让github分配一个可访问的域名了，具体步骤就是登录你github -&amp;gt; New repository：具体可以看下图：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/images/setting.png&quot; alt=&quot;setting image&quot; /&gt;
+这里需要注意的是，域名的形式是&lt;strong&gt;username.github.io&lt;/strong&gt;这里的username要和你github的帐户名相同，因为一个用户只能拥有一个这样的域名的，如果不一致的话，是无法访问的！&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;If the first part of the repository doesn’t exactly match your username, it won’t work, so make sure to get it right.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;em&gt;这里因为我已经添加过了，所以有提示name already；正常会显示一个绿色的小勾，说明没有问题了。&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;测试访问：&lt;/strong&gt;
+如果你这时候访问，发现404；原因很简单，因为你还没有提供任何可供访问的东西，那么怎样为我的bolg添加内容呢？&lt;br /&gt;
+你不是已经在github上建立了一个username.github.io的仓库吗，你的博客内容当然也全部放在这个仓库里了，所以先把这个仓库拉到本地了：&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+$ git clone https://github.com/username/username.github.io
+&lt;/pre&gt;
+&lt;p&gt;OK现在可以为博客加点内容了：&lt;br /&gt;
+&lt;?prettify?&gt;&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+$ cd username.github.io
+$ touch index.html #这里有必要提供这样一个index.html
+$ vim index #随便写点东西 Hello World
+&lt;/pre&gt;
+&lt;p&gt;当然这只是你本地添加的，接下来你就希望把你刚添加的放到线上，如果按我们平时的习惯，可能就需要cdn之类的部署上线，但因为全是静态的文件，你只需要用git提交到你远程的github下的username.github.io仓库就可以了：&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+$ git add --all
+$ git commit -m &quot;initial commit&quot;
+$ git push origin master
+&lt;/pre&gt;
+&lt;p&gt;现在访问你的username.github.io应该就可以看到你刚写的Hello World了。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;接下就是用jekyll搭建你的博客了&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;安装jekyll&lt;/strong&gt;  首先当然你得先装jekyll，因为jekyll是基于ruby的，所以你先得有一个ruby环境，除此之外它还依赖一些其他的环境，你可以一起安装：&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+$ sudo apt-get install ruby ruby-dev make gcc nodejs
+&lt;/pre&gt;
+&lt;p&gt;之所以会需要&lt;code&gt;node&lt;/code&gt;你可以看一下这个github上的&lt;a href=&quot;https://github.com/jekyll/jekyll/issues/2327&quot;&gt;issue&lt;/a&gt;&lt;br /&gt;
+如果你的环境已经搭好，是不是就直接可以安装呢？还有两个坑一定填完了再安装，切记：&lt;br /&gt;
+1. linux下的用户，最好不要用packgae安装，因为官方并没有很多好的维护这一块，最好的方式是通过RubyGems来安装，Ruby社区很好的在维护； &lt;br /&gt;
+2. 因为网络的原因（你懂的），放在rubygems.org上的资源你可能下载不了，所以你可以换一下rubygems的镜像源，国内&lt;a href=&quot;https://ruby.taobao.org/&quot;&gt;淘宝的rubygems镜像&lt;/a&gt;做很好的，可以替代官方的版本。&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+$ gem sources --remove https://rubygems.org/
+$ gem sources -a https://ruby.taobao.org/
+$ gem sources -l
+https://ruby.taobao.org
+# 请确保只有 ruby.taobao.org
+&lt;/pre&gt;
+&lt;p&gt;如果按照上面说的，环境搭好，而且也换过镜像源了，那么你可以放心安装了；&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+$ sudo gem install jekyll
+&lt;/pre&gt;
+&lt;p&gt;&lt;strong&gt;jekyll写博客&lt;/strong&gt;
+现在你可以两种方法使用jekyll New 来新建一个jekyll博客：&lt;br /&gt;
+一种是直接到你的username.github.io文件下new一个新博客(不推荐)&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+$ cd username.github.io
+$ jekyll new ./
+$ jekyll serve --force_polling 
+#这里的--force_polling 是因为jekyll版本更新后--watch不起作用了  
+#和--watch一样的功能，旨在开发时监视文件改动并自动更新，不用每  
+#次改动都要启动serve
+&lt;/pre&gt;
+&lt;p&gt;现在可以你打开http://localhost:4000,应该就可以一个初始的jekyll博客了 &lt;br /&gt;
+&lt;img src=&quot;http://localhost:4000/assets/images/initial.png&quot; alt=&quot;setting image&quot; /&gt;
+当然这也是可以的，但这样会然人觉得缺少一个开发环境，因为改动和提交都在这里，特别是刚开始的去改博客内容时，改动很多，最后想还原也很麻烦；另外一点是，如果你看过jekyll介绍，你会发现jekyll所有最后生成的页面其实都放在_site这个文件中,所以你根本不用把所有文件都放到你的username.github.io仓库中，毕竟github只有300M免费空间。&lt;/p&gt;
+
+&lt;p&gt;正如上面说的，应该有一个开发环境，并且只提交自动生成的博客页面，及_site目录下的文件&lt;br /&gt;
+所以这里提供另一种方案&lt;br /&gt;
+先新建一个供开发使用的目录及这里的myblog-dev，开发都集中在这个目录下&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+$ mkdir myblog-dev
+$ cd myblog-dev
+$ jekyll new ./
+$ jekyll serve --force_polling
+&lt;/pre&gt;
+&lt;p&gt;然后只把自动生成的_site中的文件放到你的username.github.io仓库中；&lt;/p&gt;
+
+&lt;p&gt;当然你也不希望每次改动完了都要把_site里的文件复制到username.github.io中再提交吧。所以你可以设置成让每次在myblod-dev中的修改自动同步到username.github.io中，这样就安心在dev中开发，然后到username.github.io中去提交了。方法是在_config.yaml中添加：&lt;a href=&quot;http://jekyllcn.com/docs/configuration/&quot;&gt;具体&lt;/a&gt;&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+source:  .
+destination:  ../username.github.io/
+&lt;/pre&gt;
+&lt;p&gt;修改保存之后&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+$ cd myblog-dev
+$ jekyll build
+&lt;/pre&gt;
+&lt;p&gt;就可以看到username.github.io下多了生成的我们想要的_site下的文件了，文件目录应该是这样的：&lt;/p&gt;
+&lt;pre class=&quot;prettify&quot;&gt;
++username.github.io  
+   index.html
+   about
+   css
+   ...
++myblog-dev
+   _posts
+   _layouts  
+   ....
+&lt;/pre&gt;
+&lt;p&gt;贴一张图可能看的更清楚，&lt;em&gt;里面的music，movie之类的文件夹是我自己的分类&lt;/em&gt;
+&lt;img src=&quot;http://localhost:4000/assets/images/list.png&quot; alt=&quot;setting image&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;接下来你就可以放心的在本地测开测试，待一切都OK之后，去username.github.io下提交，然后线上也和你本地一样了！&lt;/p&gt;
+
+</description>
+        <pubDate>Tue, 05 May 2015 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/technology/2015/05/05/how-to-setup-blog-use-jekyll.html</link>
+        <guid isPermaLink="true">http://localhost:4000/technology/2015/05/05/how-to-setup-blog-use-jekyll.html</guid>
+        
+        
+        <category>technology</category>
+        
+      </item>
     
       <item>
         <title>对人工智能的思考</title>
@@ -16,8 +144,8 @@
 
 </description>
         <pubDate>Mon, 04 May 2015 00:00:00 +0800</pubDate>
-        <link>http://nanijiayou.github.io/think/2015/05/04/think.html</link>
-        <guid isPermaLink="true">http://nanijiayou.github.io/think/2015/05/04/think.html</guid>
+        <link>http://localhost:4000/think/2015/05/04/think.html</link>
+        <guid isPermaLink="true">http://localhost:4000/think/2015/05/04/think.html</guid>
         
         
         <category>think</category>
@@ -29,8 +157,8 @@
         <description>&lt;p&gt;狗日的青春&lt;/p&gt;
 </description>
         <pubDate>Mon, 04 May 2015 00:00:00 +0800</pubDate>
-        <link>http://nanijiayou.github.io/music/2015/05/04/music.html</link>
-        <guid isPermaLink="true">http://nanijiayou.github.io/music/2015/05/04/music.html</guid>
+        <link>http://localhost:4000/music/2015/05/04/music.html</link>
+        <guid isPermaLink="true">http://localhost:4000/music/2015/05/04/music.html</guid>
         
         
         <category>music</category>
@@ -42,8 +170,8 @@
         <description>&lt;p&gt;小丑！&lt;/p&gt;
 </description>
         <pubDate>Mon, 04 May 2015 00:00:00 +0800</pubDate>
-        <link>http://nanijiayou.github.io/movie/2015/05/04/moive.html</link>
-        <guid isPermaLink="true">http://nanijiayou.github.io/movie/2015/05/04/moive.html</guid>
+        <link>http://localhost:4000/movie/2015/05/04/moive.html</link>
+        <guid isPermaLink="true">http://localhost:4000/movie/2015/05/04/moive.html</guid>
         
         
         <category>movie</category>
@@ -55,8 +183,8 @@
         <description>&lt;p&gt;海边的卡夫卡&lt;/p&gt;
 </description>
         <pubDate>Mon, 04 May 2015 00:00:00 +0800</pubDate>
-        <link>http://nanijiayou.github.io/book/2015/05/04/book.html</link>
-        <guid isPermaLink="true">http://nanijiayou.github.io/book/2015/05/04/book.html</guid>
+        <link>http://localhost:4000/book/2015/05/04/book.html</link>
+        <guid isPermaLink="true">http://localhost:4000/book/2015/05/04/book.html</guid>
         
         
         <category>book</category>
