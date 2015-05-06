@@ -2,12 +2,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>nani</title>
-    <description>简单,专注,有内容。
+    <description>我的要博客简单专注有内容。
 </description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 05 May 2015 22:25:17 +0800</pubDate>
-    <lastBuildDate>Tue, 05 May 2015 22:25:17 +0800</lastBuildDate>
+    <link>http://nanijiayou.github.io/</link>
+    <atom:link href="http://nanijiayou.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Wed, 06 May 2015 13:33:39 +0800</pubDate>
+    <lastBuildDate>Wed, 06 May 2015 13:33:39 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -24,7 +24,7 @@
 
 &lt;p&gt;&lt;strong&gt;github新建仓库：&lt;/strong&gt;既然要利用githug的page搭建博客，当然先要让github分配一个可访问的域名了，具体步骤就是登录你github -&amp;gt; New repository：具体可以看下图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/images/setting.png&quot; alt=&quot;setting image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;http://nanijiayou.github.io/assets/images/setting.png&quot; alt=&quot;setting image&quot; /&gt;
 这里需要注意的是，域名的形式是&lt;strong&gt;username.github.io&lt;/strong&gt;这里的username要和你github的帐户名相同，因为一个用户只能拥有一个这样的域名的，如果不一致的话，是无法访问的！&lt;/p&gt;
 
 &lt;blockquote&gt;
@@ -87,7 +87,7 @@ $ jekyll serve --force_polling
 #次改动都要启动serve
 &lt;/pre&gt;
 &lt;p&gt;现在可以你打开http://localhost:4000,应该就可以一个初始的jekyll博客了 &lt;br /&gt;
-&lt;img src=&quot;http://localhost:4000/assets/images/initial.png&quot; alt=&quot;setting image&quot; /&gt;
+&lt;img src=&quot;http://nanijiayou.github.io/assets/images/initial.png&quot; alt=&quot;setting image&quot; /&gt;
 当然这也是可以的，但这样会然人觉得缺少一个开发环境，因为改动和提交都在这里，特别是刚开始的去改博客内容时，改动很多，最后想还原也很麻烦；另外一点是，如果你看过jekyll介绍，你会发现jekyll所有最后生成的页面其实都放在_site这个文件中,所以你根本不用把所有文件都放到你的username.github.io仓库中，毕竟github只有300M免费空间。&lt;/p&gt;
 
 &lt;p&gt;正如上面说的，应该有一个开发环境，并且只提交自动生成的博客页面，及_site目录下的文件&lt;br /&gt;
@@ -124,14 +124,14 @@ $ jekyll build
    ....
 &lt;/pre&gt;
 &lt;p&gt;贴一张图可能看的更清楚，&lt;em&gt;里面的music，movie之类的文件夹是我自己的分类&lt;/em&gt;
-&lt;img src=&quot;http://localhost:4000/assets/images/list.png&quot; alt=&quot;setting image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;http://nanijiayou.github.io/assets/images/list.png&quot; alt=&quot;setting image&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;接下来你就可以放心的在本地测开测试，待一切都OK之后，去username.github.io下提交，然后线上也和你本地一样了！&lt;/p&gt;
 
 </description>
         <pubDate>Tue, 05 May 2015 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/technology/2015/05/05/how-to-setup-blog-use-jekyll.html</link>
-        <guid isPermaLink="true">http://localhost:4000/technology/2015/05/05/how-to-setup-blog-use-jekyll.html</guid>
+        <link>http://nanijiayou.github.io/technology/2015/05/05/how-to-setup-blog-use-jekyll.html</link>
+        <guid isPermaLink="true">http://nanijiayou.github.io/technology/2015/05/05/how-to-setup-blog-use-jekyll.html</guid>
         
         
         <category>technology</category>
@@ -144,8 +144,8 @@ $ jekyll build
 
 </description>
         <pubDate>Mon, 04 May 2015 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/think/2015/05/04/think.html</link>
-        <guid isPermaLink="true">http://localhost:4000/think/2015/05/04/think.html</guid>
+        <link>http://nanijiayou.github.io/think/2015/05/04/think.html</link>
+        <guid isPermaLink="true">http://nanijiayou.github.io/think/2015/05/04/think.html</guid>
         
         
         <category>think</category>
@@ -157,8 +157,8 @@ $ jekyll build
         <description>&lt;p&gt;狗日的青春&lt;/p&gt;
 </description>
         <pubDate>Mon, 04 May 2015 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/music/2015/05/04/music.html</link>
-        <guid isPermaLink="true">http://localhost:4000/music/2015/05/04/music.html</guid>
+        <link>http://nanijiayou.github.io/music/2015/05/04/music.html</link>
+        <guid isPermaLink="true">http://nanijiayou.github.io/music/2015/05/04/music.html</guid>
         
         
         <category>music</category>
@@ -170,8 +170,8 @@ $ jekyll build
         <description>&lt;p&gt;小丑！&lt;/p&gt;
 </description>
         <pubDate>Mon, 04 May 2015 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/movie/2015/05/04/moive.html</link>
-        <guid isPermaLink="true">http://localhost:4000/movie/2015/05/04/moive.html</guid>
+        <link>http://nanijiayou.github.io/movie/2015/05/04/moive.html</link>
+        <guid isPermaLink="true">http://nanijiayou.github.io/movie/2015/05/04/moive.html</guid>
         
         
         <category>movie</category>
@@ -183,8 +183,8 @@ $ jekyll build
         <description>&lt;p&gt;海边的卡夫卡&lt;/p&gt;
 </description>
         <pubDate>Mon, 04 May 2015 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/book/2015/05/04/book.html</link>
-        <guid isPermaLink="true">http://localhost:4000/book/2015/05/04/book.html</guid>
+        <link>http://nanijiayou.github.io/book/2015/05/04/book.html</link>
+        <guid isPermaLink="true">http://nanijiayou.github.io/book/2015/05/04/book.html</guid>
         
         
         <category>book</category>
