@@ -6,15 +6,15 @@
 </description>
     <link>http://nanijiayou.github.io/</link>
     <atom:link href="http://nanijiayou.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 06 May 2015 13:33:39 +0800</pubDate>
-    <lastBuildDate>Wed, 06 May 2015 13:33:39 +0800</lastBuildDate>
+    <pubDate>Wed, 06 May 2015 19:59:59 +0800</pubDate>
+    <lastBuildDate>Wed, 06 May 2015 19:59:59 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
         <title>githubpage + jekyll 搭建自己的博客——简单,专注博文本身</title>
         <description>&lt;p&gt;在github上搭建个人博客是个很有争议的话题，在知乎上也有看到 &lt;a href=&quot;http://www.zhihu.com/question/20717014&quot;&gt;使用 GitHub Pages 来做博客是否道德？&lt;/a&gt; 这类问题。其实道不道德完全在你自己，github本身就是一个开放，分享，交流的平台。如果你的博客本身的目的就是记录分享，这完全符合github的期望，就完全没必要纠结这样的问题。但如果你的目的是商业用途，你完全可以购买github的服务，而不让自己有这种道德包袱。&lt;/p&gt;
 
-&lt;p&gt;&lt;a href=&quot;http://jekyllcn.com/&quot;&gt;jekyll&lt;/a&gt;用来搭建博客，是很有意思的一种体验，不同wordpress，Ghost，jekyll的所有内容都是静态的，不需要数据库，NO 数据库,使用起来也很简单,但这都它最吸引我的，它最吸引我的是它专注的是博客内容本身，就像这样：&lt;a href=&quot;http://tom.preston-werner.com/&quot;&gt;tom.preston-werner&lt;/a&gt;，让你的博客更有质量而不是看起来更漂亮，而这正是体验其他博客之后发现自己真正想要的。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;http://jekyllcn.com/&quot;&gt;jekyll&lt;/a&gt;用来搭建博客，是很有意思的一种体验，不同wordpress，Ghost，jekyll的所有内容都是静态的，不需要数据库，NO 数据库,使用起来也很简单,但它它最吸引我的是它专注的是博客内容本身，让你的博客更有质量而不是看起来更漂亮，而这正是体验其他博客之后发现自己真正想要的。&lt;/p&gt;
 
 &lt;p&gt;好了，说怎样搭吧:&lt;/p&gt;
 
@@ -132,6 +132,8 @@ $ jekyll build
         <pubDate>Tue, 05 May 2015 00:00:00 +0800</pubDate>
         <link>http://nanijiayou.github.io/technology/2015/05/05/how-to-setup-blog-use-jekyll.html</link>
         <guid isPermaLink="true">http://nanijiayou.github.io/technology/2015/05/05/how-to-setup-blog-use-jekyll.html</guid>
+        
+        <category>github page jekyll</category>
         
         
         <category>technology</category>
