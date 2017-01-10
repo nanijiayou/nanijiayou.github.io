@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>浏览器渲染原理阅读笔记</title>
+  <meta name="description" content="浏览器渲染原理阅读笔记，主要是笔记和一些有价值的文章链接。">
+  <meta name="keywords" content="browser render principles nanijiayou nani 简单博客">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://nanijiayou.github.io/technology/2016/12/20/technology-browser-render-principles.html">
+  <link rel="alternate" type="application/rss+xml" title="nani" href="http://nanijiayou.github.io/feed.xml" />
+</head>
+
+
+  <body onload="prettyPrint()">
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">nani</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">关于我</a>
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/movie/">电影</a>
+          
+        
+          
+          <a class="page-link" href="/music/">音乐</a>
+          
+        
+          
+          <a class="page-link" href="/technology/">技术文档</a>
+          
+        
+          
+          <a class="page-link" href="/think/">思考</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/book/">书籍</a>
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">浏览器渲染原理阅读笔记</h1>
+    <p class="post-meta">Dec 20, 2016</p>
+  </header>
+
+  <article class="post-content">
+    <h4 id="section">1.涉及的浏览器</h4>
+<p>主流的浏览器主要有：Internet Explorer，Firefox，Safari，Chrome，Opera。主要涉及开源浏览器原理。</p>
+
+<h4 id="section-1">2.浏览器的主要功能</h4>
+<p>浏览器的主要功能就是向服务器发出请求，在浏览器窗口中展示您选择的网络资源。这里的资源一般是指HTML文档，也可以是PDF，图片或者其他类型。资源的位置由用户使用URI指定。浏览器解释并显示HTML文件的方式是在HTML和CSS规范中指定的。这些规范是由网络标准化组织W3C（万维网联盟）指定。</p>
+
+<h4 id="section-2">3.浏览器高晨结构</h4>
+<p>浏览器的主要组建有：<br />
+ 1. <strong>用户界面</strong> 主要包括：地址栏，前进/后退按钮，书签菜单等。除了浏览器主窗口显示的您的请求的页面外，其他显示的各个部分都属于用户界面。<br />
+ 2. <strong>浏览器引擎</strong> 在用户界面和呈现引擎直接传送指令。<br />
+ 3. <strong>呈现一起</strong> 负责显示请求的内容。如果请求的内容是HTML，它就负责解析HTML和CSS内容，并将解析后的内容显示在屏幕上。<br />
+ 4. <strong>网络</strong>，用于网络调用，比如HTTP请求。其接口与平台无关，并为所有平台提供底层实现。<br />
+ 5. <strong>用户界面后端</strong> 用于绘制基本的窗口小部件，比如组合框和窗口。其公开了与平台无关的通用接口，而在底层使用操作系统的用户界面方法。<br />
+ 6. <strong>JavaScript解析器</strong> 用于解析和执行JavaScript代码。<br />
+ 7. <strong>数据存储</strong> 这是持久层。浏览器需要在硬盘上保存各种数据，例如Cookie。新的HTML规范（HTML5）定义了”网络数据库”，这是一个完整（但是轻便）的浏览器内数据库。
+值得注意的是，和大多数浏览器不同，chrome浏览器的每个标签页都分别对应一个呈现引擎实例。每个标签页都是一个独立的进程。</p>
+
+<h4 id="section-3">4.呈现引擎</h4>
+<p>呈现引擎的作用是将请求的内容”呈现”在浏览器的显示屏幕上。默认情况先可以呈现HTML和XML文档和图片，还可以通过浏览器插件的形式显示其他内容，比如PDF等。这里主要介绍主要的用途：<strong>呈现使用CSS格式化的HTML内容和图片</strong>。<br />
+呈现引擎的主流程：<br />
+呈现引擎一开始会从网络层获取请求文档的内容，内容的大小一般限制在8000个快以内。然后进行下面的基本流程：<br />
+ 1.<strong>构建呈现树</strong> 解析HTML文档，并将各个标记逐步转化成”内容树”上的DOM节点。同时也会解析外部CSS文件以及样式元素中的样式数据。HTML中这些带有视觉指令的样式信息将用于创建另一个树结构：<strong>呈现树</strong>。呈现树包含多个带有视觉属性（如颜色和尺寸）的矩形。这些矩形的排列顺序就是它们将在屏幕上显示的顺序。<br />
+ 2. <strong>布局</strong> 布局处理也就是为每一个节点分配一个应该出现在屏幕上的确切坐标。<br />
+ 3. <strong>绘制</strong> 呈现引擎遍历呈现树，由用户界面后端层将每个几点绘制出来。<br />
+需要注意的地方是，这是一个渐进的过程。为了将内容尽快的呈现在屏幕上，呈现引擎不需要等到整个HTML文档解析完毕之后，就会开始构建呈现树和设置布局。在不断接受和处理来自网络层的其余内容的同时，呈现引擎会将部分内容解析并显示出来。</p>
+
+<h4 id="section-4">5.理解解析</h4>
+<p>解析是呈现引擎中非常重要的一个环节。<br />
+<strong>解析文档</strong> 是指将文档转化为有意义的结构，也就是可让代码理解和使用的结构。解析得到的结果通常是代表了文档结构的节点树，它称作<strong>解析树</strong>或者<strong>语法树</strong>。<br />
+<strong>语法</strong> 解析是以文档所遵循的语法规则（编写文档所用的语言或格式）为基础。所有可以解析的格式都必须对应确定的语法（由词汇和语法规则构成）。这成为”与上下文无关的语法”。
+<strong>解析器和词法分析的组合</strong> 解析的过程可以分成两个子过程：<strong>词法分析</strong>和<strong>语法分析</strong>。<br />
+  <strong>词法分析</strong>是指将输入内容分割成大量标记的过程。标记是语言中的词汇，即构成内容的单位。在人类语言中，它相当于语言词典中的单词。<br />
+  <strong>语法分析</strong>是应用语言的语法规则的过程。<br />
+解析器通常将解析工作分给以下两个组建来处理： 词法分析器（有时也称为标记生成器），负责将输入内容分解成一个个有效标记；而解析器负责根据语言的语法规则分析文档结构，从而构建解析树。<br />
+解析是一个迭代的过程。通常，解析器会向词法分线器请求一个新标记，并尝试将与某条语法规则进行匹配。如果发现了匹配规则，解析器会将一个对应于该标记的节点添加的解析树中，然后继续请求下一个标记。
+词汇和语法的正式定义：<br />
+词汇通常用正则表达式表示，例如：<br />
+<code> 
+INTEGER: 0|[1-9][0-9]*;     
+PLUS: +;      
+MINUS: -;    
+</code></p>
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">nani</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li>nani</li>
+          <li><a href="mailto:heyuanjiayou@gmail.com">heyuanjiayou@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/nanijiayou">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">nanijiayou</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/mack marz">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">mack marz</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">我的要博客简单专注有内容。
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+<script type="text/javascript" src="http://nanijiayou.github.io/assets/js/prettify.js"></script>
+
+
+  </body>
+
+</html>
