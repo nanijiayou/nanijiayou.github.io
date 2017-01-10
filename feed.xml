@@ -6,8 +6,8 @@
 </description>
     <link>http://nanijiayou.github.io/</link>
     <atom:link href="http://nanijiayou.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 10 Jan 2017 16:02:01 +0800</pubDate>
-    <lastBuildDate>Tue, 10 Jan 2017 16:02:01 +0800</lastBuildDate>
+    <pubDate>Tue, 10 Jan 2017 20:42:03 +0800</pubDate>
+    <lastBuildDate>Tue, 10 Jan 2017 20:42:03 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -18,7 +18,7 @@
 &lt;h4 id=&quot;section-1&quot;&gt;2.浏览器的主要功能&lt;/h4&gt;
 &lt;p&gt;浏览器的主要功能就是向服务器发出请求，在浏览器窗口中展示您选择的网络资源。这里的资源一般是指HTML文档，也可以是PDF，图片或者其他类型。资源的位置由用户使用URI指定。浏览器解释并显示HTML文件的方式是在HTML和CSS规范中指定的。这些规范是由网络标准化组织W3C（万维网联盟）指定。&lt;/p&gt;
 
-&lt;h4 id=&quot;section-2&quot;&gt;3.浏览器高晨结构&lt;/h4&gt;
+&lt;h4 id=&quot;section-2&quot;&gt;3.浏览器高层结构&lt;/h4&gt;
 &lt;p&gt;浏览器的主要组建有：&lt;br /&gt;
  1. &lt;strong&gt;用户界面&lt;/strong&gt; 主要包括：地址栏，前进/后退按钮，书签菜单等。除了浏览器主窗口显示的您的请求的页面外，其他显示的各个部分都属于用户界面。&lt;br /&gt;
  2. &lt;strong&gt;浏览器引擎&lt;/strong&gt; 在用户界面和呈现引擎直接传送指令。&lt;br /&gt;
@@ -48,12 +48,128 @@
 解析器通常将解析工作分给以下两个组建来处理： 词法分析器（有时也称为标记生成器），负责将输入内容分解成一个个有效标记；而解析器负责根据语言的语法规则分析文档结构，从而构建解析树。&lt;br /&gt;
 解析是一个迭代的过程。通常，解析器会向词法分线器请求一个新标记，并尝试将与某条语法规则进行匹配。如果发现了匹配规则，解析器会将一个对应于该标记的节点添加的解析树中，然后继续请求下一个标记。
 词汇和语法的正式定义：&lt;br /&gt;
-词汇通常用正则表达式表示，例如：&lt;br /&gt;
-&lt;code&gt; 
-INTEGER: 0|[1-9][0-9]*;     
-PLUS: +;      
-MINUS: -;    
-&lt;/code&gt;&lt;/p&gt;
+词汇通常用正则表达式表示，例如：&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+INTEGER: 0|[1-9][0-9]
+PLUS: +
+MINUS: -
+&lt;/pre&gt;
+&lt;p&gt;语法通常使用一种称为巴科斯范式&lt;a href=&quot;http://baike.baidu.com/link?url=a8Ej6_-69hTEnX815btfMH8hQCPXSXmD5w6PGI2dKtH3v1DK8J7eW6CF5kJxyveIyuu_NTBcIItXOVcdW8DetK&quot;&gt;BNF&lt;/a&gt;的格式来定义。例如：&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+expression :=  term  operation  term;
+operation :=  PLUS | MINUS;
+term := INTEGER | expression;
+&lt;/pre&gt;
+
+&lt;p&gt;&lt;strong&gt;后面在看一些文章，仔细研究下再来补充&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h4 id=&quot;html&quot;&gt;HTML解析器&lt;/h4&gt;
+&lt;p&gt;HTML解析器的任务是将HTML标记解析成解析树。&lt;br /&gt;
+HTML的词法和语法在W3C组织创建的规范中进行了定义。&lt;br /&gt;
+正如我们在解析过程的简介中介绍的一样，语法可以用BNF等格式进行正式定义。很遗憾，所有的常规解析器都不试用于HTML(它们可以用于解析CSS和JavaScript)。HTML并不能很容易地用解析器所需的与上下文无关的语法来定义。 &lt;br /&gt;
+&lt;strong&gt;DTD&lt;/strong&gt;： 有一种可以定义HTML的正式格式：DTD(Document Type Definition，文档类型定义)，但它不是与上下文无关的语法。 
+这看上去有点奇怪：HTML和XML非常相似，那么不是应该有很多XML解析器可以使用吗？区别在于HTML的处理更为”宽容”，它允许您省略某些隐式添加的标记，有时还能省略一些起始或者结束标记等等。和XML严格的语法不同，HTML整体来看是一种”软性”的语法。但这种看上去细微的差别却带来了巨大的影响，一方面，这是HTML如此流行的原因，它能容忍你的错误，简化开发。另一方面，这使得它很难编写正式的语法。概况的说，HTML无法很容易地通过常规解析器解析，也无法通过XML解析器来解析。&lt;br /&gt;
+&lt;strong&gt;HTML的定义采用了DTD格式&lt;/strong&gt;： 此格式可用于定义标准通用标记语言&lt;a href=&quot;http://baike.baidu.com/item/%E6%A0%87%E5%87%86%E9%80%9A%E7%94%A8%E7%BD%AE%E6%A0%87%E8%AF%AD%E8%A8%80?fromtitle=SGML&amp;amp;fromid=2901416&amp;amp;type=syn&quot;&gt;SGML&lt;/a&gt;族的语言。它包括所有允许使用的元素及其属性和层次结构的定义。DTD存在一下变体，严格模式完全遵循HTML规范，而其他模式可支持以前的浏览器所使用的标记。这样做的目的是确保向下兼容一些早期版本的内容。&lt;br /&gt;
+&lt;strong&gt;DOM&lt;/strong&gt;：HTML解析器的输出”解析树”是由DOM元素和属性节点构成的树结构。DOM是文档对象模型(Document Object Model)的缩写。它是HTML文档的对象表示，同时也是外部内容(例如JavaScript)与HTML元素之间的接口。解析树的根节点是”Document”对象。DOM与标记之间几乎是一一对应的关系。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-5&quot;&gt;解析构建算法&lt;/h4&gt;
+&lt;p&gt;后补&lt;/p&gt;
+
+&lt;h4 id=&quot;css&quot;&gt;CSS解析&lt;/h4&gt;
+&lt;p&gt;和HTML不同的是，CSS是上下文无关的语法，可以使用已有的集线器进行解析。事实上，CSS规范定义了CSS的语法和词法。 
+词法语法(词汇)是针对各个标记用正则表达式定义的，例如：&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+num:  [0-9]+|[0-9]\*&quot;.&quot;[0-9]+]&quot;&quot;]]
+nonascii  [\200-\377]]
+nmstart   [\_a-z]|{nonascii}|{escape}
+nmchar    [\_a-z0-9-]|{nonascii}|{escape}
+name    {nmchar}+
+ident   {nmstart}{nmchar}\*
+&lt;/pre&gt;
+&lt;p&gt;“ident”是标识符（identifier）的缩写，比如类名。”name”是元素的ID(通过”#”来引用)。&lt;br /&gt;
+语法是采用BNF格式描述的。&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+rulset
+  : selector [ &#39;,&#39; S\* selector ]\*
+  &#39;{&#39; S\* declaration [ &#39;;&#39; S\* declaration ]\* &#39;}&#39; S\*
+  ;
+selector
+  : simple\_selector [ combinator selector | S+ [ combinator? selector 
+  ]? ]?
+  ;
+simple\_selector
+  : element\_name [ HASH | class | attrib | pseudo ]\*
+  | [ HASH | class | attrib | pseudo ]+
+  ;
+class
+  : &#39;.&#39; IDENT
+  ;
+element\_name
+  : IDENT | &#39;\*&#39;
+  ;
+attrib
+  : &#39;[&#39; S\* IDENT S\* [ [ &#39;=&#39; | INCLUDES | DASHMATCH ] S\*
+  [ IDENT | STRING ] S\* ] &#39;]&#39;
+  ;
+pseudo
+  : &#39;:&#39; [ IDENT | FUNCTION S\* [IDENT S\*] &#39;)&#39; ]
+  ;
+&lt;/pre&gt;
+
+&lt;h4 id=&quot;webkit-css&quot;&gt;WebKit CSS解析器&lt;/h4&gt;
+&lt;p&gt;WebKit使用Flex和Bison解析器生成器，通过CSS语法文件自动创建解析器。这两种解析器都会将CSS文件解析成StyleSheet对象，且每个对象都包含CSS规则。CSS规则对象则包含选择器和声明对象，以及其他与CSS语法对应的对象。&lt;br /&gt;
+&lt;strong&gt;处理脚本和样式表的顺序&lt;/strong&gt; &lt;br /&gt;
+  1. &lt;strong&gt;脚本&lt;/strong&gt; 网络的模型是同步的。网页作者希望解析器遇到script标记时立即解析并执行脚本。文档的解析将停止，直到脚本执行完毕。如果脚本是外部的，那么解析过程会停止，直到从网络中同步抓去资源完成后再继续。此模型已经使用多年，也在HTML4和HTML5规范中进行了指定。作者也可以将脚本标注为”defer”，这样它可就不会停止文档解析，二是等到解析结束才执行。HTML5增加了一个选项，可将脚本标记为异步，以便由其他线程解析和执行。&lt;br /&gt;
+  2. &lt;strong&gt;预解析&lt;/strong&gt; WebKit和FireFox都进行了这项优化。在执行脚本时，其他线程会解析文档的其余部分，找出并加载需要通过网络加载的其他资源。通过这种方式，资源可以在并行连接上加载，从而提高总体速度。不过值得注意的是，预解析不会修改DOM树，而是将这项工作交由主解析器处理，而预解析器只会解析外部资源（例如外部脚本，样式表和图片）的引用。&lt;br /&gt;
+  3. &lt;strong&gt;样式表&lt;/strong&gt; 另一方面，样式表有着不同的模型。理论上来说，应用样式表不会更改DOM树，因此似乎没有必要等待样式表而停止文档解析。但这涉及到一个问题，就是脚本在文档解析阶段会请求样式信息。如果当时没有加载解析样式，脚本就会获得错误的回复，这样显然会产生很多问题。这看上去是一个非典型的案例，但事实上非常普遍。Firefox在样式表加载和解析的过程中，会禁止所有脚本。而对于WebKit而言，仅当脚本尝试访问的样式属性可能受尚未加载的样式表影响时，它才会禁止该脚本。
+&lt;strong&gt;呈现树构建&lt;/strong&gt;&lt;br /&gt;
+在DOM树构建的同时，浏览器还会构建另一个树结构：&lt;strong&gt;呈现树&lt;/strong&gt;。这是由可视化元素按照其显示顺序而组成的树，也是文档的可视化表示。它的作用是让您按照正确的顺序绘制内容。 &lt;br /&gt;
+WebKit将呈现树中的元素称为&lt;strong&gt;呈现对象&lt;/strong&gt;（RenderObject）或者&lt;strong&gt;呈现器&lt;/strong&gt;，呈现对象知道如何布局并将自身及其子元素绘制出来。 &lt;br /&gt;
+WebKit RenderObject类是所有呈现对象的基类，其定义大致如下：&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+class RenderObject{
+  virtual void layout();
+  virtual void paint(PaintInfo);
+  virtual void rect repaintRect();
+  Node* node; //the DOM node
+  RenderStyle* style; //the computed style
+  RenderLayer\* containgLayer; //the containing z-index layer
+}
+&lt;/pre&gt;
+&lt;p&gt;每一个呈现对象都代表了一个矩形的区域，通常对应于相关节点的css框，这一点在CSS规范中有所描述。它包含诸如宽度，高度，位置等几何信息。而且框的类型还会受到与节点相关的”display”样式属性的影响。下面这段WebKit代码描述了根据display属性的不同，针对同一个DOM节点应创建什么类型的呈现对象。&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+RenderObject* RenderObject::createObject(Node* node, RenderStyle* style)
+{
+	Document* doc = node-&amp;gt;document();
+	RenderArena* arena = doc-&amp;gt;renderArena();
+	...
+	RenderObject* o = 0;
+
+	switch (style-&amp;gt;display()) {
+		case NONE:
+			break;
+		case INLINE:
+			o = new (arena) RenderInline(node);
+			break;
+		case BLOCK:
+			o = new (arena) RenderBlock(node);
+			break;
+		case INLINE_BLOCK:
+			o = new (arena) RenderBlock(node);
+			break;
+		case LIST_ITEM:
+			o = new (arena) RenderListItem(node);
+			break;
+			...
+	}
+
+	return o;
+}
+&lt;/pre&gt;
+&lt;p&gt;元素类型也是考虑因素之一，例如表单控件和表格都对应特殊的框。在WebKit中，如果一个元素特殊的呈对象，就会替换createRender方法。呈现对象所指的样式对象中包含了一些和几何无关的信息。&lt;br /&gt;
+&lt;strong&gt;呈现树和DOM树之间的关系&lt;/strong&gt;&lt;br /&gt;
+呈现对象是和DOM元素相对应的，但并非一一对应。非可视化的DOM元素不会插入呈现树中，例如”head”元素。如果元素的display属性值为”none”，那么也不会显示在呈现树中（但visibility属性值为”hidden”的元素仍会显示）。&lt;/p&gt;
+
 </description>
         <pubDate>Tue, 20 Dec 2016 00:00:00 +0800</pubDate>
         <link>http://nanijiayou.github.io/technology/2016/12/20/technology-browser-render-principles.html</link>
