@@ -241,7 +241,7 @@ RenderObject* RenderObject::createObject(Node* node, RenderStyle* style)
 </pre>
 <p>元素类型也是考虑因素之一，例如表单控件和表格都对应特殊的框。在WebKit中，如果一个元素特殊的呈对象，就会替换createRender方法。呈现对象所指的样式对象中包含了一些和几何无关的信息。<br />
 <strong>呈现树和DOM树之间的关系</strong><br />
-呈现对象是和DOM元素相对应的，但并非一一对应。非可视化的DOM元素不会插入呈现树中，例如”head”元素。如果元素的display属性值为”none”，那么也不会显示在呈现树中（但visibility属性值为”hidden”的元素仍会显示）。</p>
+呈现对象是和DOM元素相对应的，但并非一一对应。非可视化的DOM元素不会插入呈现树中，例如”head”元素。如果元素的display属性值为”none”，那么也不会显示在呈现树中（但visibility属性值为”hidden”的元素仍会显示）</p>
 
 
   </article>
