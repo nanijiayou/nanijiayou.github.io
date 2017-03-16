@@ -517,8 +517,63 @@ require(["module-a", "module-b"], function(a, b) {
 </pre>
 <p>使用AMD，你需要使用<code>require</code>，传入一个一拉模块组成的数组和一个回调，回调函数的参数和依赖模块数组的顺序是一样的。</p>
 
-<p>Webpack2 也支持<code>System.import</code>，</p>
+<p>Webpack2 也支持<code>System.import</code>，不同于上面两者，它使用的是<code>promises</code>而不是回调。我认为这是一个很有用的改进，将他们包入<code>promise</code>应该也不困难，如果你现在就要使用的话。不过需要注意的是，<code>System.import</code>已经落后余<code>import()</code>的一些新规范了。如果你使用Babel（或者TypeScript）将会抛出语法错误。你可以使用<a href="https://www.npmjs.com/package/babel-plugin-dynamic-import-webpack">babel-plugin-dynamic-import-webpack</a>，但这会将其转为<code>requier.ensure</code>而不是让Babel识别合法的<code>import</code>函数或者保量它让webpack来处理。到目前我还没没看到AMD或者<code>require.ensure</code>将很快被淘汰，并且<code>System.import</code>将会在version 3中被支持，在不久的将来，所以使用你喜欢的方式就好。</p>
 
+<p>现在让我们扩展一下我们的代码，实现等待几秒然后，延迟加载输出Handlebars模板的功能。要实现这样的功能也很简单，只需要将顶部的<code>import</code>删除，然后增加一个<code>setTimeout</code>函数就可以实现了：</p>
+<pre class="prettyprint">
+import { map } from 'lodash';
+
+let numbers = map([1,2,3,4,5,6], n =&gt; n&#42;n);
+
+setTimeout( () =&gt; {
+    require(['./numberlist.hbs'], template =&gt; {
+        document.getElementById('app-container').innerHTML = template({numbers});
+    })
+}, 2000)
+</pre>
+<p>现在，如果你运行<code>npm start</code>，你将会看到一些其他的资源产生，比如这里就会产生一个名为<code>1.bundle.js</code>的文件。如果你在浏览器中打开这个页面，同市打开开发者工具的查看network面板，你就会看到在2秒之后，一个新的资源被加载执行。你可以看到，这是不难实现的，但却可以很好的减少文件的大小，并且提高用户体验。</p>
+
+<p>注意，这些sub-bundles或者块包含所有的依赖模块，除了那些它们的父块已经包含的模块。（你可以有多个入口，每个入口延迟加载相应的快，这样就可以将不同的依赖关系加载到每个父级）。</p>
+
+<h4 id="vendor-chunk">创建一个Vendor Chunk</h4>
+<p>让我们来讨论一个我们能做到的进一步的优化：vendor chunks。你可以定义一个单独的包来放置一些常用（<code>common</code>）的模块，或者放置一些第三方（<code>third-party</code>）的代码，通常这些模块不会更改。这样客户端就可以将这些包与你的应用代码分离缓存了，所以当你更新你的应用代码时，客户端就不必再次在下载这些没有改变的包了。</p>
+
+<p>为了实现这样的效果，我们将会用到一个名为<code>CommonChunkPlugin</code>的插件。因为它包含在webpack内部，所以我们不需要单独下载，我们需要做的就是改写一下<code>webpack.confi.js</code>文件：</p>
+
+<pre class="prettyprint">
+var HtmlwebpackPlugin = require('html-webpack-plugin');
+var CommonChunkPlugin = require('webpack/lib/optimize/CommonChunkPlugin');
+module.exports = {
+    entry: {
+        vendor: ['babel-polyfill', 'lodash'],
+        main: './src/main.js'
+    },
+    output: {
+        path: './dist',
+        filename: 'bundle.js'
+    },
+    module: {
+        rules: [
+            {
+                test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/,
+                options: { plugins: ['transform-runtime'], presets: ['es2015'] }
+            },
+            { test: /\.hbs$/, loader: 'handlebars-loader' }
+        ]
+    },
+    plugins: [
+        new HtmlwebpackPlugin({
+            title: 'Intro to webpack',
+            template: 'src/index.html'
+        }),
+        new CommonsChunkPlugin({
+            name: "vendor",
+            filename: "vendor.bundle.js"
+        })
+    ]
+};
+</pre>
+<p>我们在第二行import这个插件，然后<code>entry</code>部分，我们使用了不同的设置，使用了一个对象，来指定多个入口。<code>vendor</code>入口标志着哪些模块将被包含到<code>vendor chunk</code>中，这里我们指定了polyfill和Lodash两个模块。然后我们指定<code>main</code>入口。之后，我们只需要在<code>plugin</code>中简单的配置一下<code>CommonChunkPlugin</code>插件，这里我们指定<code>vendor</code>块作为基础块，并指定将vendor的代码将被储存在一个叫<code>vendor.bundle.js</code>的文件中。</p>
 
   </article>
 

@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 16 Mar 2017 17:56:47 +0800</pubDate>
-    <lastBuildDate>Thu, 16 Mar 2017 17:56:47 +0800</lastBuildDate>
+    <pubDate>Thu, 16 Mar 2017 20:37:00 +0800</pubDate>
+    <lastBuildDate>Thu, 16 Mar 2017 20:37:00 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -444,8 +444,63 @@ require([&quot;module-a&quot;, &quot;module-b&quot;], function(a, b) {
 &lt;/pre&gt;
 &lt;p&gt;使用AMD，你需要使用&lt;code&gt;require&lt;/code&gt;，传入一个一拉模块组成的数组和一个回调，回调函数的参数和依赖模块数组的顺序是一样的。&lt;/p&gt;
 
-&lt;p&gt;Webpack2 也支持&lt;code&gt;System.import&lt;/code&gt;，&lt;/p&gt;
+&lt;p&gt;Webpack2 也支持&lt;code&gt;System.import&lt;/code&gt;，不同于上面两者，它使用的是&lt;code&gt;promises&lt;/code&gt;而不是回调。我认为这是一个很有用的改进，将他们包入&lt;code&gt;promise&lt;/code&gt;应该也不困难，如果你现在就要使用的话。不过需要注意的是，&lt;code&gt;System.import&lt;/code&gt;已经落后余&lt;code&gt;import()&lt;/code&gt;的一些新规范了。如果你使用Babel（或者TypeScript）将会抛出语法错误。你可以使用&lt;a href=&quot;https://www.npmjs.com/package/babel-plugin-dynamic-import-webpack&quot;&gt;babel-plugin-dynamic-import-webpack&lt;/a&gt;，但这会将其转为&lt;code&gt;requier.ensure&lt;/code&gt;而不是让Babel识别合法的&lt;code&gt;import&lt;/code&gt;函数或者保量它让webpack来处理。到目前我还没没看到AMD或者&lt;code&gt;require.ensure&lt;/code&gt;将很快被淘汰，并且&lt;code&gt;System.import&lt;/code&gt;将会在version 3中被支持，在不久的将来，所以使用你喜欢的方式就好。&lt;/p&gt;
 
+&lt;p&gt;现在让我们扩展一下我们的代码，实现等待几秒然后，延迟加载输出Handlebars模板的功能。要实现这样的功能也很简单，只需要将顶部的&lt;code&gt;import&lt;/code&gt;删除，然后增加一个&lt;code&gt;setTimeout&lt;/code&gt;函数就可以实现了：&lt;/p&gt;
+&lt;pre class=&quot;prettyprint&quot;&gt;
+import { map } from &#39;lodash&#39;;
+
+let numbers = map([1,2,3,4,5,6], n =&amp;gt; n&amp;#42;n);
+
+setTimeout( () =&amp;gt; {
+    require([&#39;./numberlist.hbs&#39;], template =&amp;gt; {
+        document.getElementById(&#39;app-container&#39;).innerHTML = template({numbers});
+    })
+}, 2000)
+&lt;/pre&gt;
+&lt;p&gt;现在，如果你运行&lt;code&gt;npm start&lt;/code&gt;，你将会看到一些其他的资源产生，比如这里就会产生一个名为&lt;code&gt;1.bundle.js&lt;/code&gt;的文件。如果你在浏览器中打开这个页面，同市打开开发者工具的查看network面板，你就会看到在2秒之后，一个新的资源被加载执行。你可以看到，这是不难实现的，但却可以很好的减少文件的大小，并且提高用户体验。&lt;/p&gt;
+
+&lt;p&gt;注意，这些sub-bundles或者块包含所有的依赖模块，除了那些它们的父块已经包含的模块。（你可以有多个入口，每个入口延迟加载相应的快，这样就可以将不同的依赖关系加载到每个父级）。&lt;/p&gt;
+
+&lt;h4 id=&quot;vendor-chunk&quot;&gt;创建一个Vendor Chunk&lt;/h4&gt;
+&lt;p&gt;让我们来讨论一个我们能做到的进一步的优化：vendor chunks。你可以定义一个单独的包来放置一些常用（&lt;code&gt;common&lt;/code&gt;）的模块，或者放置一些第三方（&lt;code&gt;third-party&lt;/code&gt;）的代码，通常这些模块不会更改。这样客户端就可以将这些包与你的应用代码分离缓存了，所以当你更新你的应用代码时，客户端就不必再次在下载这些没有改变的包了。&lt;/p&gt;
+
+&lt;p&gt;为了实现这样的效果，我们将会用到一个名为&lt;code&gt;CommonChunkPlugin&lt;/code&gt;的插件。因为它包含在webpack内部，所以我们不需要单独下载，我们需要做的就是改写一下&lt;code&gt;webpack.confi.js&lt;/code&gt;文件：&lt;/p&gt;
+
+&lt;pre class=&quot;prettyprint&quot;&gt;
+var HtmlwebpackPlugin = require(&#39;html-webpack-plugin&#39;);
+var CommonChunkPlugin = require(&#39;webpack/lib/optimize/CommonChunkPlugin&#39;);
+module.exports = {
+    entry: {
+        vendor: [&#39;babel-polyfill&#39;, &#39;lodash&#39;],
+        main: &#39;./src/main.js&#39;
+    },
+    output: {
+        path: &#39;./dist&#39;,
+        filename: &#39;bundle.js&#39;
+    },
+    module: {
+        rules: [
+            {
+                test: /\.jsx?$/, loader: &#39;babel-loader&#39;, exclude: /node_modules/,
+                options: { plugins: [&#39;transform-runtime&#39;], presets: [&#39;es2015&#39;] }
+            },
+            { test: /\.hbs$/, loader: &#39;handlebars-loader&#39; }
+        ]
+    },
+    plugins: [
+        new HtmlwebpackPlugin({
+            title: &#39;Intro to webpack&#39;,
+            template: &#39;src/index.html&#39;
+        }),
+        new CommonsChunkPlugin({
+            name: &quot;vendor&quot;,
+            filename: &quot;vendor.bundle.js&quot;
+        })
+    ]
+};
+&lt;/pre&gt;
+&lt;p&gt;我们在第二行import这个插件，然后&lt;code&gt;entry&lt;/code&gt;部分，我们使用了不同的设置，使用了一个对象，来指定多个入口。&lt;code&gt;vendor&lt;/code&gt;入口标志着哪些模块将被包含到&lt;code&gt;vendor chunk&lt;/code&gt;中，这里我们指定了polyfill和Lodash两个模块。然后我们指定&lt;code&gt;main&lt;/code&gt;入口。之后，我们只需要在&lt;code&gt;plugin&lt;/code&gt;中简单的配置一下&lt;code&gt;CommonChunkPlugin&lt;/code&gt;插件，这里我们指定&lt;code&gt;vendor&lt;/code&gt;块作为基础块，并指定将vendor的代码将被储存在一个叫&lt;code&gt;vendor.bundle.js&lt;/code&gt;的文件中。&lt;/p&gt;
 </description>
         <pubDate>Tue, 21 Feb 2017 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/technology/2017/02/21/webpack-%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D-%E7%BF%BB%E8%AF%91.html</link>
