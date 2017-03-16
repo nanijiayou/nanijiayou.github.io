@@ -11,8 +11,8 @@
   <meta name="keywords" content="github page jekyll blog 博客 jekyll博客搭建 nanijiayou nani 简单博客">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://nanijiayou.github.io/technology/2015/05/05/how-to-setup-blog-use-jekyll.html">
-  <link rel="alternate" type="application/rss+xml" title="nani" href="http://nanijiayou.github.io/feed.xml" />
+  <link rel="canonical" href="http://localhost:4000/technology/2015/05/05/how-to-setup-blog-use-jekyll.html">
+  <link rel="alternate" type="application/rss+xml" title="nani" href="http://localhost:4000/feed.xml" />
 </head>
 
 
@@ -97,7 +97,7 @@
 
 <p><strong>github新建仓库：</strong>既然要利用githug的page搭建博客，当然先要让github分配一个可访问的域名了，具体步骤就是登录你github -&gt; New repository：具体可以看下图：</p>
 
-<p><img src="http://nanijiayou.github.io/assets/images/setting.png" alt="setting image" />
+<p><img src="http://localhost:4000/assets/images/setting.png" alt="setting image" />
 这里需要注意的是，域名的形式是<strong>username.github.io</strong>这里的username要和你github的帐户名相同，因为一个用户只能拥有一个这样的域名的，如果不一致的话，是无法访问的！</p>
 
 <blockquote>
@@ -160,7 +160,7 @@ $ jekyll serve --force_polling
 #次改动都要启动serve
 </pre>
 <p>现在可以你打开http://localhost:4000,应该就可以一个初始的jekyll博客了 <br />
-<img src="http://nanijiayou.github.io/assets/images/initial.png" alt="setting image" />
+<img src="http://localhost:4000/assets/images/initial.png" alt="setting image" />
 当然这也是可以的，但这样会然人觉得缺少一个开发环境，因为改动和提交都在这里，特别是刚开始的去改博客内容时，改动很多，最后想还原也很麻烦；另外一点是，如果你看过jekyll介绍，你会发现jekyll所有最后生成的页面其实都放在_site这个文件中,所以你根本不用把所有文件都放到你的username.github.io仓库中，毕竟github只有300M免费空间。</p>
 
 <p>正如上面说的，应该有一个开发环境，并且只提交自动生成的博客页面，及_site目录下的文件<br />
@@ -197,7 +197,7 @@ $ jekyll build
    ....
 </pre>
 <p>贴一张图可能看的更清楚，<em>里面的music，movie之类的文件夹是我自己的分类</em>
-<img src="http://nanijiayou.github.io/assets/images/list.png" alt="setting image" /></p>
+<img src="http://localhost:4000/assets/images/list.png" alt="setting image" /></p>
 
 <p>接下来你就可以放心的在本地测开测试，待一切都OK之后，去username.github.io下提交，然后线上也和你本地一样了！</p>
 
@@ -265,7 +265,7 @@ $ jekyll build
   </div>
 
 </footer>
-<script type="text/javascript" src="http://nanijiayou.github.io/assets/js/prettify.js"></script>
+<script type="text/javascript" src="http://localhost:4000/assets/js/prettify.js"></script>
 
 
   </body>

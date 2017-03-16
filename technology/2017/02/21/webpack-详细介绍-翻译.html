@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>webpack 详细介绍翻译</title>
+  <meta name="description" content="webpack js boundling module">
+  <meta name="keywords" content="webpack introduction webpack教程 webpack 翻译 nanijiayou nani 简单博客">
+
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="canonical" href="http://localhost:4000/technology/2017/02/21/webpack-%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D-%E7%BF%BB%E8%AF%91.html">
+  <link rel="alternate" type="application/rss+xml" title="nani" href="http://localhost:4000/feed.xml" />
+</head>
+
+
+  <body onload="prettyPrint()">
+
+    <header class="site-header">
+
+  <div class="wrapper">
+
+    <a class="site-title" href="/">nani</a>
+
+    <nav class="site-nav">
+      <a href="#" class="menu-icon">
+        <svg viewBox="0 0 18 15">
+          <path fill="#424242" d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.031C17.335,0,18,0.665,18,1.484L18,1.484z"/>
+          <path fill="#424242" d="M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0c0-0.82,0.665-1.484,1.484-1.484 h15.031C17.335,6.031,18,6.696,18,7.516L18,7.516z"/>
+          <path fill="#424242" d="M18,13.516C18,14.335,17.335,15,16.516,15H1.484C0.665,15,0,14.335,0,13.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.031C17.335,12.031,18,12.696,18,13.516L18,13.516z"/>
+        </svg>
+      </a>
+
+      <div class="trigger">
+        
+          
+          <a class="page-link" href="/about/">关于我</a>
+          
+        
+          
+        
+          
+        
+          
+          <a class="page-link" href="/movie/">电影</a>
+          
+        
+          
+          <a class="page-link" href="/music/">音乐</a>
+          
+        
+          
+          <a class="page-link" href="/technology/">技术文档</a>
+          
+        
+          
+          <a class="page-link" href="/think/">思考</a>
+          
+        
+          
+        
+          
+          <a class="page-link" href="/book/">书籍</a>
+          
+        
+          
+        
+      </div>
+    </nav>
+
+  </div>
+
+</header>
+
+
+    <div class="page-content">
+      <div class="wrapper">
+        <div class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">webpack 详细介绍翻译</h1>
+    <p class="post-meta">Feb 21, 2017</p>
+  </header>
+
+  <article class="post-content">
+    <p>JavaScript模块打包已经出现有一段时间了，RequireJs在2009第一次实现，然后有Browserify登台，之后又一些其他的打包工具流传开来。在这些工具中，做为最好之一的webpack引起了人们的关注。如果你不熟悉它，我希望这篇文章对你有开始使用它所帮助。</p>
+
+<h4 id="section">什么是模块打包工具</h4>
+<p>在大多数的编程语言中（包括最新的没有被浏览器全部实现的ES6+）,你可以将你的代码拆分成多个文件（一般一个文件代表一个模块），之后在你的应用中引入这些模块，以使用这些模块所提供的功能。但浏览器没有内置类似的功能，所以需要模块打包工具来实现响应的功能，这些功能主要包括：异步的加载这些模块并且在加载完后允许它们，或者将所有依赖的模块合并成一个单一的JavaScript文件并以HTMl的&lt;script&gt;标签的形式加载.</p>
+
+<p>如果没有这些模块打包的工具，我们就需要自己进行手动的文件合并或者按顺序在HTML中加载相应的&lt;script&gt;标签，但这样做有很多坏处：</p>
+
+<p>  1. 首先你得记录文件加载的正确顺序，包括文件依赖了哪些文件，而且不要加载一些你不会用的文件。<br />
+  2. 过多的&lt;script&gt;标签意味着更多的服务端的请求，影响性能。<br />
+  3. 很明显这需要很多的人工劳动，而原本这些都可以交给计算机来帮我们完成的。</p>
+
+<p>大多数的模块打包工具还与npm，Bower集成方便你轻松的加载需要的第三方依赖。只需要安装这些依赖然，之后在你的应用中引入它们就可以使用它们提供的功能了。如果你能正确的配置你打包工具，你可以确保你依赖的第三方工具都是独立的文件，这样当你更新了你的应用的代码之后，用户那边更新缓存时也不用再下载这些文件了，因为这些文件本身没有发生变化（当然这还得看你的http缓存指令）。</p>
+
+<h4 id="webpack">为什么使用webpack</h4>
+<p>现在你明白了我们使用模块打包工具的一些基本的原因，那么为什么在这么多工具中我们要选择webpack呢？有一下几点原因：</p>
+
+<p>  1. 相对较新，有了其他打包工具的经验，使得它避免一些老的打包工具的缺陷和问题。<br />
+  2. 入手简单，如果你只需要将一些JavaScript文件打包不需要其他配置，你可以连配置文件都不用写。 <br />
+  3. 插件系统，让它做更多的事情，扩展出更多的功能，所以它能成为你需要的唯一打包工具。</p>
+
+<p>我只看过几个模块打包和构建工具可以做到相同的事情，但比起它们webpack还有一个优势：一个可以非常大的社区，它可以在你遇到问题时帮助你。Browserify的社区也很大，但它缺少一些webpack包含的潜在的基本功能。听了我这么多对webpack的赞扬，你肯定迫不及待的想看看具体的实例。所以Let’do that。</p>
+
+<h4 id="webpack-1">安装webpack</h4>
+<p>在使用webpack之前我们需要安装它。安装之前，我们需要Node.js和npm，我假设你都已经安装好了，如果你还有没有安装，<a href="https://nodejs.org/en/">Node.js官网</a>是一个很好的开始的地方。</p>
+
+<p>安装webpack有两种方式：全局安装和本地安装。如果你使用全局安装，你可以在任何地方使用它，但这样做webpack就不会作为你项目的依赖而包含在内，所以你就不能在不同的项目中使用不同版本的webpack（比如你开始一个新的项目，需要更多的功能，所以你升级到版本，而那些老的项目又不能兼容，这种情况很常见），因为你的webpack是全局的。所以，我建议本地安装CLI包，并使用相对路径或者npm script来运行。如果你还没有本地安装CLI包，你可以阅读这篇<a href="https://www.joezimjs.com/javascript/no-more-global-npm-packages/">文章</a>了解详细。</p>
+
+<p>后面我们会使用npm script的方式，所以你可以先不用看本地安装的内容。首先：创建一个文件夹作为你项目的根目录，作为我们学习和实验webpack的地方，<a href="https://github.com/joezimjs/webpack-Introduction-Tutorial">GitHub</a>有相应的代码你可以clone使用，当然你也可以自己跟着创建相应的文件。</p>
+
+<p>现在我们进入你项目的根目录，你应该会运行npm init来初始化你项目，后面需要填写的内容不是很重要，除非你希望在npm上发布你包。</p>
+
+<p>现在你有了一个package.json的文件（当你执行npm init创建时创建的），你项目所有的依赖信息都在这个文件里。现在让我们将webpack作为我们项目的第三方依赖进行安装，执行：npm install webpack -D。(-D 意思是将依赖的信息写入到package.json，你也可以使用–save-dev)。</p>
+
+<p>在我们可以使用webpack之前，我们应该有一个简单的应用去测试它。我说简单的应用，因为它确实很简单。不过在这之前我们先安装Lodash以便我们可以在我们的应用中测试第三方的依赖：<code>nmp install lodash -S</code>（-S同上面的–save）。之后我们创建一个名为<code>src</code>的文件夹，然后在里面编写一个名为main.js的文件，内容为：</p>
+
+<pre class="prettyprint">
+var map = require('lodash/map');
+
+function square(n) {
+    return n*n;
+}
+
+console.log(map([1,2,3,4,5,6], square));
+</pre>
+
+<p>非常简单，对吧。我们只是创建了包含了1~6的整数的数组，然后使用Lodash的map函数创建一个新数组，新数组的每一个项的值是原数组的每一项的平方，最后我们打印出这个新数组。你可以使用Node.js运行这个文件：<code>node src/main.js</code>，最后的输出应该是：<code>[1,4,9,16,25,36]</code>。</p>
+
+<p>但我们真正想要实现的是将这个文件和Lodash的代码进行打包一边我们的浏览器可以真正的运行它，也就是webpack应该做的工作，我们应该怎么做呢？</p>
+
+<h4 id="webpack-2">使用webpack提供的命令</h4>
+<p>不写配置文件而直接使用webpack最简单的方式就是使用webpack提供的命令。在这些命令中最简单的就是只提供一个入口文件路径和一个出口文件路径就行了。webpack会读取入口文件，然后追钟它的依赖树，之后将依赖的文件合并为一个单一的文件，最后将这个文件产出到你指定的产出路径中，文件名为你指定的文件名。比如这里的，我们的入口文件是<code>src/main.js</code>，我们希望打包到<code>dist/bundle.js</code>。当然我们可以创建一个npm script来实现（我们没有全局的安装webpack，所以我们不能直接运行webpack命令）。在package.json，我们像下面这样编写”script”字段：</p>
+
+<pre class="prettyprint">
+…
+ "script": {
+   "build": "webpack src/main.js dist/bundle.js",
+  }
+…
+</pre>
+
+<p>然后，如果你运行<code>npm run build</code>，webpack便开始工作了。当执行完之后，我们变会得到一个新的dist/bundle.js的文件。现在你可以执行这个文件了，不论是Node.js还是浏览器得到的结果应该都是一样的。</p>
+
+<p>在我们进一步探索webpack之前，让我们先编写一个稍微专业一点的npm script，实现在打包之前先删除<code>dist</code>目录以及其中的文件的功能，以及增加一下脚本来执行我们的打包。首先我们需要做的是安装<code>del-cli</code>，这样我们就可以实现删除目录，而且不用担心那些和我们使用不同操作系统的人删除命令是否有效的问题了。<code>npm install del-cli -D</code>。之后更新我们的npm script脚本：</p>
+
+<pre class="prettyprint">
+…
+ "script": {
+   "prebuild": "del-cli dist -f",
+   "build": "webpack src/main.js dist/bundle.js",
+   "execute": "node dist/bundle.js",
+   "start": "npm run build -s &amp;&amp; npm run execute -s"
+  }
+…
+</pre>
+
+<p>这里我们没有改写<code>build</code>的部分，但是提供了清除<code>dist</code>目录的<code>prebuild</code>命令。每次我们执行<code>build</code>命令前都会先执行这里的<code>prebuild</code>命令。我们还加入了<code>execute</code>命令，使用Node.js执行打包命令。当然我们可以使用<code>start</code>一条命令执行所以的任务（-s参数目的是在console中不产生其他没有用的信息）。当我们执行<code>npm start</code>，你就能很快看见webpack的产出了，也就是命令行打印出来的新的数组。如果你得到这样的结果，那么恭喜你，你已经完成了我们的第一个示例了。</p>
+
+<h4 id="section-1">使用配置文件</h4>
+<p>和上面我们使用命令行开始学习使用webpack一样有趣，如果你想了解更多的关于webpack的特性，命令很多的时候，你就会希望把你命令移到一个配置文件中去，而不是全部使用命令行的方式，这样做有很多原因，主要就是配置文件的方式更加灵活，功能更强大，而且可读性更强，因为它是用JavaScript编写的。</p>
+
+<p>所以我们先创建一个配置文件，只需要在你的项目的根目录中新建一个叫webpack.config.js的文件就行了。webpack会默认寻找这个文件进行配置，当然你也可以自定义默认配置文件的文件名和路径，只需要在使用命令时传入一个参数<code>--config [filename]</code>就行了。</p>
+
+<p>在这篇教程中，我们使用标准的文件名。现在我们尝试将上面使用过的示例通过配置文件的方式来实现，为了实现它，我们需要在我们的<code>webpack.config.js</code>文件中添加如下代码：</p>
+
+<pre class="prettyprint">
+module.exports = {
+  entry: './src/main.js',
+  output: {
+    path: './dist',
+    filename: 'bundle.js'
+  }
+};
+</pre>
+
+<p>在配置文件中，我们说明了入口文件和产出文件，和我们在上面使用命令行的方式很相似。注意这是一个JavaScript文件，而不是一个JSON文件，所以我需要导出配置对象（configuration object），及这里的<code>module.export</code>。虽然这样看起来并没有我们使用命令好看，但不要着急，在我们的教程结尾时，你就会发现这很有用了。</p>
+
+<p>现在我们就可以删除<code>package.json</code>中那些传给webpack的参数了，你的脚本看起来应该差不多像这样：</p>
+
+<pre class="prettyprint">
+…
+ "script": {
+   "prebuild": "del-cli dist -f",
+   "build": "webpack",
+   "execute": "node dist/bundle.js",
+   "start": "npm run build -s &amp;&amp; npm run execute -s"
+  }
+…
+</pre>
+
+<p>你可以象上面那样运行<code>npm start</code>，之后的输出你应该很熟悉。这就是我们的第二个示例了。</p>
+
+<h4 id="loaders">使用Loaders</h4>
+<p>通常来讲我们有两种方式扩展webpack的功能：loaders(加载器) 和 plugins（插件）。插件我们会在后面讨论，我们先看一下loaders。loaders的主要功能是对给定类型的文件进行转换或是操作得到相应的输出。对单一类型的文件你可以链式的调用多个loader进行处理，如果你使用过gulp你就很容易明白,，它有点类似gulp中的task，就像我们在工厂中经常看到的流水线一样，我们的loader就像流水线上的各类工序，经过链式的层层加工处理，最终得到我们想要的产出。例如，你可以指定我们的<code>.js</code>文件，先使用ESLint进行预处理，之后在使用Babel将es6解析成es5。如果ESLint的执行过程中出现了错误，将会在console中打印出相应的信息，一旦链式中的一环出现了问题，webpack就会停止工作了。</p>
+
+<p>对于我们这里的这个小应用程序来说，为了能尽量先简单起见，我暂时不在webpack中加入linting的功能，只是想是webpack能利用Babel将ES6解析为ES5。当然，为了测试，我们先得有一些ES6的代码对吧，所以我们将我们的<code>main.js</code>用ES6改写一下：</p>
+
+<pre class="prettyprint">
+  import {map} from 'lodash';
+
+  console.log(map[1,2,3,4,5,6], n =&gt; n * n);
+</pre>
+
+<p>上面的代码在功能上还是一样的，不同的是我们使用了箭头函数来代替<code>square</code>函数，另一方面，我使用了<code>import</code>关键字来加载<code>lodash</code>模块，这些都是ES6中的语法。这样实际上会加载的是一个全量的Lodash的文件在我们进行打包的时候，而不是只是按需要的只加载<code>lodash/map</code>。当然你可以重新写一下第一行代码，改成<code>import {map} from 'lodash'</code>来改善。我这里之所没有这样去改，主要是因为：<br />
+  1. 在一些大型的应用中，你可能会使用Lodash库中很多功能，所以你可能需要加载全部。<br />
+  2. 如果你在使用Backbone.js，你就会知道，分开单独的加载所需的函数是非常困难的，因为没有文档告诉你它需要的依赖是哪些。<br />
+  3. 在下一个版本的webpack中，开发者计划包含构建文件依赖树之类的功能，这样就可以去掉那些没用被使用的模块了，所以我们这样写在下一个版本中仍可以正常工作。<br />
+  4. 我想让它作为一个示例来强调一下上面关于打包的一些要点。</p>
+
+<p>（注意：这两种加载Lodash的方式都可以正常工作的原因是，Lodash的开发者提供了这样的功能，并不是所有的库都可以这样工作的）。</p>
+
+<p>总之，我们有了ES6的代码了，现在我们的任务是将它解析为ES5，以便可以在我们的浏览器中使用。首先，我们需要Babel以及Babel关于webpack的一些依赖，这样Babel才能在webpack中正常运行起来。最少的话，我们需要<a href="https://www.npmjs.com/package/babel-core">babel-core</a>（Babel的核心功能，执行绝大多数的工作），<a href="https://www.npmjs.com/package/babel-loader">babel-loader</a>（webpack loader可以调用babel-core的接口），<a href="https://www.npmjs.com/package/babel-preset-es2015">babel-preset-es2015</a>（包含Bable将ES6转换为ES5的转码规则）。同时我们也会安装<a href="https://www.npmjs.com/package/babel-plugin-transform-runtime">bable-plugin-transform-runtim</a>和<a href="https://www.npmjs.com/package/babel-polyfill">babel-polyfill</a>两个模块。具体可以查看这里<a href="http://www.ruanyifeng.com/blog/2016/01/babel.html">Babel入门教程</a>和这里介绍Babel各种插件的<a href="https://github.com/brunoyang/blog/issues/20">Bable全家桶</a>。</p>
+
+<p>好了，现在让我们来安装这些依赖吧：<code>npm i -D babel-core bable-loader bable-preset-es2015 bable-plugin-transform-runtime bable-polyfill</code>。之后我们来编写配置文件<code>webpack.config.js</code>，首先我们需要在文件中找个地方添加我们的loader，修改<code>webpack.config.js</code>文件之后像这样。</p>
+
+<pre class="prettyprint">
+module.exports = {
+  entry: '.src/main.js',
+  output: {
+    path: './dist',
+    filename: 'bundle.js'
+  },
+  module: {
+    rules: [
+      …			   
+    ]
+  }
+}
+</pre>
+
+<p>这里我们添加了一个命名<code>module</code>的字段，<code>module</code>中包含值一个rules的字段，rules是一个数组，这个数组包含了每个loader的配置内容。这是我们将要添加babel-loader的地方。对于每一个loader我们最少需要配置两个参数：<code>test</code>和<code>loader</code>，test通常是一个说明每个文件的绝对路径的正则表达式。这些正则表达式通常用来匹配文件的类型，比如<code>/\.js$/</code>匹配<code>.js</code>文件，在我们后面的示例文件中，我们编写为<code>/\.jsx?$/</code>匹配<code>js</code>和<code>jsx</code>文件，如果你希望在项目中加入react代码。之后我们需要配置<code>loader</code>参数，告诉webpack使用那些loader来处理<code>test</code>匹配出来的文件。</p>
+
+<p>这里我们只需依次传入loader的名称就可以了，名称直接使用<code>!</code>连接，就像这样：<code>bable-loader!eslint-loader</code>。webpack会<strong><code>从右往左</code></strong>的读取配置，所以这里<code>eslint-loader</code>会先执行，而<code>bable-loader</code>后执行。如果你想为一些loader需要指定特定的参数，你可以使用query语法，比如为Bable指定<code>fakeoption</code>参数为<code>true</code>：<code>bable-loader?fakeopton=true!eslint-loader</code>。你也可以使用<code>use</code>代替loader来指定需要的loaders，<code>use</code>使用数组而不是字符串，这样看起来可能会清晰一些：<code>use:['bable-loader?fakeoption=true', 'eslint-loader']</code>，这样有很多的loader的时候，更方便阅读。</p>
+
+<p>因为Bable是我们示例里唯一的loader，所以我们关于loader的配置大概像这样：</p>
+
+<pre class="prettyprint">
+…			   
+  rules: [
+    {test: /\.jsx?$/, loader: 'bable-loader'}
+  ]
+…			   
+</pre>
+
+<p>如果你像我们这里一样只使用了一个loader，那么除了上面说的<code>query</code>的方式指定loader参数外，你还可以使用<code>options</code>对象，采用键值对的方式，比如上面的例子，还可以这样写：</p>
+
+<pre class="prettyprint">
+…			   
+  rules: [
+    {
+      test: /\.jsx?$/, 
+      loader: 'bable-loader',
+      options: {
+        fakeoption: true
+      }
+    }
+  ]
+…			   
+</pre>
+
+<p>我们这里采用了这样的语法，为Bable指定了几个参数：</p>
+
+<pre class="prettyprint">
+…			   
+  rules: [
+    {
+      test: /\.jsx?$/, 
+      loader: 'bable-loader',
+      options: {
+        plugins: ['transform-runtime'],
+        presets: ['es2015']
+      }
+    }
+  ]
+…			   
+</pre>
+
+<p>首先需要配置ES6的语法规则，这样才能将ES6解析为ES5，同时我们也配置了transform-runtime插件，当然这个插件不是必须的。还有一种可选的方案就是使用<code>.babelrc</code>文件来配置这些参数，但后面我不会告诉你怎么做，通常我建议使用<code>.babelrc</code>进行配置，但为了更好的说明webpack的配置，我们采用在webpack的配置文件中配置。</p>
+
+<p>配置到这里，我们只差一件是就可以完成loader的配置了。我们需要告诉Babel<code>node_modules</code>目录下的文件是不需要进行解析的，这样可以提高我们打包的效率。我们可以使用<code>exclude</code>来指定哪些目录下的文件不需要做处理。<code>exclude</code>的值也是一个正则表达式，我们的项目中可以这样配置：</p>
+
+<pre class="prettyprint">
+…			   
+  rules: [
+    {
+      test: /\.jsx?$/, 
+      loader: 'bable-loader',
+      exclude: /node_modules/,
+      options: {
+        plugins: ['transform-runtime'],
+        presets: ['es2015']
+      }
+    }
+  ]
+…			   
+</pre>
+
+<p>或者，我们可以使用<code>include</code>来指定只解析<code>src</code>目录，道理差不多。现在，你运行<code>npm start</code>可以发现ES6代码解析成了ES5，执行的结果同上。如果你希望使用<code>polyfill</code>插件而不是<code>transform-runtime</code>插件，你只需要修改两处就行了，先删除<code>['transform-runtime']</code>然后在<code>entry</code>中加入<code>babel-polyfill</code>即可。</p>
+
+<pre class="prettyprint">
+entry: [
+  'babel-polyfill',
+  './src/main.js'
+]			   
+</pre>
+
+<p>除了使用webpack的配置文件，我们也可以在<code>src/main.js</code>文件中加入<code>import 'babel-polyfill'</code>，最后的效果都是一样的。我们这里采用了在webpack的配置文件中添加的方式，主要是因为这我们后面的示例需要这样做，而且这样也是很好的例子，说明了如何将多个文件打包到一起。总之，这是我们的第三个示例，你可以运行<code>npm start</code>，结果应该和上面的结果是一致的。</p>
+
+<h4 id="handlebars-loader">使用Handlebars-loader</h4>
+<p>让我再加入一个新的的loader：handlebars-loader。handlebars-loader会将Handlebars模板文件解析为一个JavaScript函数，当我们在其他JavaScript文件中import这个模板文件时（<code>import template from './handlebars.hbs'</code>）。这个函数会被导入到JavaScript中。这是我喜欢webpack loader的一个重要原因：你可以import非JavaScript文件，并将它们全部打到一个包中，这些文件会被处理成能被JavaScript处理的形式。还有一个经常使用到的例子,就是我们可以使用loader将图片解析为base64编码，最后利用JavaScript在页面中输出图片。如果你合理利用多种loader，你甚至可以做到减少图片的大小，提升性能。</p>
+
+<p>照例，我们首先需要安装这个loader：<code>npm i -D handlebars-loader</code>。如果你尝试使用他，你会发现它还不能工作，因为你还需要Handlebars本身：<code>npm i -D handlebars</code>。这里你可以自行控制Hanldebars的版本，不需要和handlebars-loader的版本保持同步，因为它们是相互独立的。</p>
+
+<p>在我们已经成功安装上面两个模块之后，我们现在需要一个handlebars模板来进行后面的工作。所以让我们来编写一个handlebars模板文件，<code>numberlist.hbs</code>，放到我们的src目录中就可以了。</p>
+
+<pre class="prettyprint">
+&lt;ul&gt;
+  &#123;&#123;#each numbers as | number i|}}
+    &lt;li&gt;&#123;&#123;number}}&lt;li&gt;
+  &#123;&#123;/each}}
+&lt;/ul&gt;
+</pre>
+
+<p>这个模板的功能是很明显的，就是产生一个无序列表<code>ul</code>，列表的每一项的值是数组<code>numbers</code>的各个项。</p>
+
+<p>好了，现在我们修改一下我们的<code>main.js</code>文件，这次是使用模板文件来产生一个无序列表，而不是像原来一样只是输出数组而已。修改完了之后，你的<code>main.js</code>文件看起来大概像这样：</p>
+
+<pre class="prettyprint">
+import {map} from 'lodash';
+import template from './numberlist.hbs';
+
+let numbers = map([1,2,3,4,5,6], n =&gt; n&#42;n);
+console.log(template({numbers}))
+</pre>
+
+<p>如果你现在运行<code>npm start</code>，你会发现它还不能正常工作，因为我们的webpack还不知道怎样加载<code>numberlist.hbs</code>这个文件，<code>numberlist.hbs</code>不是JavaScript文件，如果想让它能正常工作，我们可以对<code>import</code>稍作修改，告诉webpack使用handlebars-loader处理。</p>
+
+<pre class="prettyprint">
+import {map} from 'lodash';
+import template from 'handlebars-loader!./numberlist.hbs';
+
+let numbers = map([1,2,3,4,5,6], n =&gt; n&#42;n);
+console.log(template({numbers}))
+</pre>
+
+<p>这里我们在<code>numberlist.hbs</code>文件路径的前面添加了一个loader名称作为前缀，并使用！隔开，目的就是告诉webpack使用handlebars-loader来加载<code>numberlist.hbs</code>文件，这样我们就可以不必修改webpack配置文件了。但是在大一些的项目中，我们可能会有非常多的模板，使用配置文件来进行配置就显得更有意义了，这样我们就不必在每个文件中都加入这样的前缀了，更容易维护。所以让我们再修改一下<code>webpack.config.js</code>：</p>
+
+<pre class="prettyprint">
+…			   
+  rules: [
+    {
+      test: /\.jsx?$/, 
+      loader: 'bable-loader',
+      options: {
+        plugins: ['transform-runtime'],
+        presets: ['es2015']
+      }
+    },
+    {
+      test: /\.hbs$/,
+      loader: 'handle-loader'
+    }
+  ]
+…			   
+</pre>
+
+<p>这个示例非常简单，我们的目的就是让webpack知道使用handerbars-loader来处理<code>.hbs</code>类型的文件。运行<code>npm start</code>，输出的结果大概像这样：</p>
+
+<pre class="prettyprint">
+&lt;ul&gt;
+    &lt;li&gt;1&lt;li&gt;
+    &lt;li&gt;4&lt;li&gt;
+    &lt;li&gt;9&lt;li&gt;
+    &lt;li&gt;16&lt;li&gt;
+    &lt;li&gt;25&lt;li&gt;
+    &lt;li&gt;36&lt;li&gt;
+&lt;/ul&gt;
+</pre>
+
+<h4 id="section-2">使用插件</h4>
+
+
+  </article>
+
+</div>
+
+      </div>
+    </div>
+
+    <footer class="site-footer">
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">nani</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col  footer-col-1">
+        <ul class="contact-list">
+          <li>nani</li>
+          <li><a href="mailto:heyuanjiayou@gmail.com">heyuanjiayou@gmail.com</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-2">
+        <ul class="social-media-list">
+          
+          <li>
+            <a href="https://github.com/nanijiayou">
+              <span class="icon  icon--github">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M7.999,0.431c-4.285,0-7.76,3.474-7.76,7.761 c0,3.428,2.223,6.337,5.307,7.363c0.388,0.071,0.53-0.168,0.53-0.374c0-0.184-0.007-0.672-0.01-1.32 c-2.159,0.469-2.614-1.04-2.614-1.04c-0.353-0.896-0.862-1.135-0.862-1.135c-0.705-0.481,0.053-0.472,0.053-0.472 c0.779,0.055,1.189,0.8,1.189,0.8c0.692,1.186,1.816,0.843,2.258,0.645c0.071-0.502,0.271-0.843,0.493-1.037 C4.86,11.425,3.049,10.76,3.049,7.786c0-0.847,0.302-1.54,0.799-2.082C3.768,5.507,3.501,4.718,3.924,3.65 c0,0,0.652-0.209,2.134,0.796C6.677,4.273,7.34,4.187,8,4.184c0.659,0.003,1.323,0.089,1.943,0.261 c1.482-1.004,2.132-0.796,2.132-0.796c0.423,1.068,0.157,1.857,0.077,2.054c0.497,0.542,0.798,1.235,0.798,2.082 c0,2.981-1.814,3.637-3.543,3.829c0.279,0.24,0.527,0.713,0.527,1.437c0,1.037-0.01,1.874-0.01,2.129 c0,0.208,0.14,0.449,0.534,0.373c3.081-1.028,5.302-3.935,5.302-7.362C15.76,3.906,12.285,0.431,7.999,0.431z"/>
+                </svg>
+              </span>
+
+              <span class="username">nanijiayou</span>
+            </a>
+          </li>
+          
+
+          
+          <li>
+            <a href="https://twitter.com/mack marz">
+              <span class="icon  icon--twitter">
+                <svg viewBox="0 0 16 16">
+                  <path fill="#828282" d="M15.969,3.058c-0.586,0.26-1.217,0.436-1.878,0.515c0.675-0.405,1.194-1.045,1.438-1.809
+                  c-0.632,0.375-1.332,0.647-2.076,0.793c-0.596-0.636-1.446-1.033-2.387-1.033c-1.806,0-3.27,1.464-3.27,3.27 c0,0.256,0.029,0.506,0.085,0.745C5.163,5.404,2.753,4.102,1.14,2.124C0.859,2.607,0.698,3.168,0.698,3.767 c0,1.134,0.577,2.135,1.455,2.722C1.616,6.472,1.112,6.325,0.671,6.08c0,0.014,0,0.027,0,0.041c0,1.584,1.127,2.906,2.623,3.206 C3.02,9.402,2.731,9.442,2.433,9.442c-0.211,0-0.416-0.021-0.615-0.059c0.416,1.299,1.624,2.245,3.055,2.271 c-1.119,0.877-2.529,1.4-4.061,1.4c-0.264,0-0.524-0.015-0.78-0.046c1.447,0.928,3.166,1.469,5.013,1.469 c6.015,0,9.304-4.983,9.304-9.304c0-0.142-0.003-0.283-0.009-0.423C14.976,4.29,15.531,3.714,15.969,3.058z"/>
+                </svg>
+              </span>
+
+              <span class="username">mack marz</span>
+            </a>
+          </li>
+          
+        </ul>
+      </div>
+
+      <div class="footer-col  footer-col-3">
+        <p class="text">我的要博客简单专注有内容。
+</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+<script type="text/javascript" src="http://localhost:4000/assets/js/prettify.js"></script>
+
+
+  </body>
+
+</html>
