@@ -85,9 +85,12 @@
   </header>
 
   <article class="post-content">
-    <p>JavaScript模块打包已经出现有一段时间了，RequireJs在2009第一次实现，然后有Browserify登台，之后又一些其他的打包工具流传开来。在这些工具中，做为最好之一的webpack引起了人们的关注。如果你不熟悉它，我希望这篇文章对你有开始使用它所帮助。</p>
+    <h4 id="section">前言</h4>
+<p>使用webpack已经很长一段时间了，对于React的开发，它确实是非常适用的工具。不过webpack官方提供的文档，确实有点混乱，不好理解。最近看到了一篇介绍webpack的文章，说的非常的详细，由浅入深，相信可以解答一些关于webpack的困惑。抽时间翻译了一下，原文可以连接<a href="https://www.smashingmagazine.com/2017/02/a-detailed-introduction-to-webpack/">A Detailed Introduction To Webpack</a>。</p>
 
-<h4 id="section">什么是模块打包工具</h4>
+<p>JavaScript模块打包已经出现有一段时间了，RequireJs在2009第一次实现，然后有Browserify登台，之后又一些其他的打包工具流传开来。在这些工具中，做为最好之一的webpack引起了人们的关注。如果你不熟悉它，我希望这篇文章对你有开始使用它所帮助。</p>
+
+<h4 id="section-1">什么是模块打包工具</h4>
 <p>在大多数的编程语言中（包括最新的没有被浏览器全部实现的ES6+）,你可以将你的代码拆分成多个文件（一般一个文件代表一个模块），之后在你的应用中引入这些模块，以使用这些模块所提供的功能。但浏览器没有内置类似的功能，所以需要模块打包工具来实现响应的功能，这些功能主要包括：异步的加载这些模块并且在加载完后允许它们，或者将所有依赖的模块合并成一个单一的JavaScript文件并以HTMl的&lt;script&gt;标签的形式加载.</p>
 
 <p>如果没有这些模块打包的工具，我们就需要自己进行手动的文件合并或者按顺序在HTML中加载相应的&lt;script&gt;标签，但这样做有很多坏处：</p>
@@ -162,7 +165,7 @@ console.log(map([1,2,3,4,5,6], square));
 
 <p>这里我们没有改写<code>build</code>的部分，但是提供了清除<code>dist</code>目录的<code>prebuild</code>命令。每次我们执行<code>build</code>命令前都会先执行这里的<code>prebuild</code>命令。我们还加入了<code>execute</code>命令，使用Node.js执行打包命令。当然我们可以使用<code>start</code>一条命令执行所以的任务（-s参数目的是在console中不产生其他没有用的信息）。当我们执行<code>npm start</code>，你就能很快看见webpack的产出了，也就是命令行打印出来的新的数组。如果你得到这样的结果，那么恭喜你，你已经完成了我们的第一个示例了。</p>
 
-<h4 id="section-1">使用配置文件</h4>
+<h4 id="section-2">使用配置文件</h4>
 <p>和上面我们使用命令行开始学习使用webpack一样有趣，如果你想了解更多的关于webpack的特性，命令很多的时候，你就会希望把你命令移到一个配置文件中去，而不是全部使用命令行的方式，这样做有很多原因，主要就是配置文件的方式更加灵活，功能更强大，而且可读性更强，因为它是用JavaScript编写的。</p>
 
 <p>所以我们先创建一个配置文件，只需要在你的项目的根目录中新建一个叫webpack.config.js的文件就行了。webpack会默认寻找这个文件进行配置，当然你也可以自定义默认配置文件的文件名和路径，只需要在使用命令时传入一个参数<code>--config [filename]</code>就行了。</p>
@@ -383,7 +386,7 @@ console.log(template({numbers}))
 &lt;/ul&gt;
 </pre>
 
-<h4 id="section-2">使用插件</h4>
+<h4 id="section-3">使用插件</h4>
 
 
   </article>
