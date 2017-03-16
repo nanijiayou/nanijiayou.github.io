@@ -6,15 +6,15 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 16 Mar 2017 14:56:25 +0800</pubDate>
-    <lastBuildDate>Thu, 16 Mar 2017 14:56:25 +0800</lastBuildDate>
+    <pubDate>Thu, 16 Mar 2017 14:59:04 +0800</pubDate>
+    <lastBuildDate>Thu, 16 Mar 2017 14:59:04 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
         <title>webpack 详细介绍翻译</title>
-        <description>&lt;h4 id=&quot;section&quot;&gt;前言&lt;/h4&gt;
-&lt;p&gt;使用webpack已经很长一段时间了，对于React的开发，它确实是非常适用的工具。不过webpack官方提供的文档，确实有点混乱，不好理解。最近看到了一篇介绍webpack的文章，说的非常的详细，由浅入深，相信可以解答一些关于webpack的困惑。抽时间翻译了一下，原文可以连接&lt;a href=&quot;https://www.smashingmagazine.com/2017/02/a-detailed-introduction-to-webpack/&quot;&gt;A Detailed Introduction To Webpack&lt;/a&gt;。&lt;/p&gt;
+        <description>&lt;p&gt;使用webpack已经很长一段时间了，对于React的开发，它确实是非常适用的工具。不过webpack官方提供的文档，确实有点混乱，不好理解。最近看到了一篇介绍webpack的文章，说的非常的详细，由浅入深，相信可以解答一些关于webpack的困惑。抽时间翻译了一下，原文连接&lt;a href=&quot;https://www.smashingmagazine.com/2017/02/a-detailed-introduction-to-webpack/&quot;&gt;A Detailed Introduction To Webpack&lt;/a&gt;。&lt;/p&gt;
 
+&lt;h4 id=&quot;section&quot;&gt;前言&lt;/h4&gt;
 &lt;p&gt;JavaScript模块打包已经出现有一段时间了，RequireJs在2009第一次实现，然后有Browserify登台，之后又一些其他的打包工具流传开来。在这些工具中，做为最好之一的webpack引起了人们的关注。如果你不熟悉它，我希望这篇文章对你有开始使用它所帮助。&lt;/p&gt;
 
 &lt;h4 id=&quot;section-1&quot;&gt;什么是模块打包工具&lt;/h4&gt;
