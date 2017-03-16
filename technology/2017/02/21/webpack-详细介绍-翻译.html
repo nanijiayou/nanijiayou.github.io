@@ -387,6 +387,137 @@ console.log(template({numbers}))
 </pre>
 
 <h4 id="section-3">使用插件</h4>
+<p>除loaders外，插件也是一种为webpack提供自定义功能的方式。相交于loaders，插件在扩展webpack的工作流上更加自由，因为插件没有指定文件类型的限制。因此它可以在我们工作流的任意位置注入，所以能做的事情也就更多。很难从概念上说明插件能做多少。在npm的安装包中，我们搜索<code>webpack-plugin</code>，可以看到一个相关的<a href="https://www.npmjs.com/search?q=webpack-plugin">列表</a>，从这里我们可以大概看出webpack能做的事情。</p>
+
+<p>在这篇教程中，我们使用了两个插件（还有一个后面可以看到）。到这里我们的教程已经很长了，所以再多几个关于插件的示例，也没什么，对吧？第一个我们要使用的插件是<a href="https://github.com/ampedandwired/html-webpack-plugin">HTML Webpack Plugin</a>，用来为我们的项目产生一个HTML文件，作为我们web应用的入口。</p>
+
+<p>使用插件之前，我们先更新一下我们的<code>srcipt</code>脚本，让我们能够跑一个简单的web server来测试我们的应用。当然首先我们得安装一个server:	<code>npm i -D http-server</code>。之后我们去掉<code>exxcute</code>，添加<code>server</code>命令：</p>
+
+<pre class="prettyprint">
+…
+ "script": {
+   "prebuild": "del-cli dist -f",
+   "build": "webpack",
+   "server": "http-server ./dist",
+   "start": "npm run build -s &amp;&amp; npm run server -s"
+  }
+…
+</pre>
+
+<p>webpack打包之后，<code>npm start</code>将会启动一个web server，你可以浏览<code>localhost:8080</code>查看这页面。当然在这之前，我们需要使用HTML插件构建起页面，所以首先我们需要安装插件：<code>npm i -D html-webpack-plugin</code>。<br />
+完成上面的工作之后，我们还需要改写一下我们的配置文件webpack.config.js：</p>
+<pre class="prettyprint">
+var HtmlwebpackPlugin = require('html-webpack-plugin');
+module.exports = {
+    entry: [
+        'babel-polyfill',
+        './src/main.js'
+    ],
+    output: {
+        path: './dist',
+        filename: 'bundle.js'
+    },
+    module: {
+        rules: [
+            {
+                test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/,
+                options: { plugins: ['transform-runtime'], presets: ['es2015'] }
+            },
+            { test: /\.hbs$/, loader: 'handlebars-loader' }
+        ]
+    },
+    plugins: [
+        new HtmlwebpackPlugin()
+    ]
+};
+</pre>
+
+<p>这里有两处修改，第一是在配置文件的顶部import我们安装的插件，第二是在尾部添加了<code>plugins</code>部分。这里我们还没有向插件传递任何参数，所以插件产生的是默认的html模板，没有太多的东西，但多了一个<code>script</code>标签，其<code>src</code>为我们打包之后的bundle.js。如果运行<code>npm start</code>在浏览器中查看，会看见一个空白的页面，但在浏览器的开发工具中你可以看到打印出的数组。</p>
+
+<p>我们应该有自己的模板而不是使用插件提供的默认模板，这样我才能在页面中显示数组，而不是在开发者工具中。所以首先，让我们来编写一个我们自己的模板，在<code>src</code>目录中，我们创建一个新的<code>index.html</code>文件。默认情况下，这个插件使用EJS作为模板，当然你可以也可以自定义<a href="https://github.com/ampedandwired/html-webpack-plugin/blob/master/docs/template-option.md">use any template language</a>。为了简单一些，我们这里使用默认的EJS模板，内容大致如下：</p>
+<pre class="prettyprint">
+&lt;DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta charset="UTF-8"&gt;
+    &lt;title&gt;&lt;%= htmlWebpackPlugin.options.title %&gt;&lt;/title&gt;
+&lt;/head&gt;
+    &lt;body&gt;
+        &lt;h2&gt;This is my Index.html Template&lt;/h2&gt;
+        &lt;div id="app-container"&gt;/div&gt;
+    &lt;/body&gt;
+&lt;html&gt;
+</pre>
+<p>不过你需要注意的有：</p>
+
+<ul>
+  <li>我们通过想插件传递参数来定义title。</li>
+  <li>我们并没有手动添加脚本文件，因为插件会默认在<code>body</code>标签最后添加。</li>
+  <li>这里的包含一个带有id的<code>div</code>是我们随便取的，后面我们会用到。</li>
+</ul>
+
+<p>现在我们有了自己的模板了，所以至少我们不会再看到一个空白的页面了。重新改写<code>main.js</code>，将其最后一行改写为：<code>document.getElementById("app-container").innerHTML = template({numbers})</code>。将节点插入我们模板中定义的<code>div</code>中，而不是打印出来。</p>
+
+<p>当然我们也需要改写一下webpack的配置文件，为我们的插件传递一些参数：</p>
+
+<pre class="prettyprint">
+var HtmlwebpackPlugin = require('html-webpack-plugin');
+module.exports = {
+    entry: [
+        'babel-polyfill',
+        './src/main.js'
+    ],
+    output: {
+        path: './dist',
+        filename: 'bundle.js'
+    },
+    module: {
+        rules: [
+            {
+                test: /\.jsx?$/, loader: 'babel-loader', exclude: /node_modules/,
+                options: { plugins: ['transform-runtime'], presets: ['es2015'] }
+            },
+            { test: /\.hbs$/, loader: 'handlebars-loader' }
+        ]
+    },
+    plugins: [
+        new HtmlwebpackPlugin({
+            title: 'Intro to webpack',
+            template: 'src/index.html'
+        })
+    ]
+};
+</pre>
+<p>这里的tempalte参数指定模板路径，title参数被传入模板中，如果你运行<code>npm start</code>，浏览器显示大致如下：
+<img src="http://localhost:4000/assets/images/temp.png" alt="html image" /></p>
+
+<p>到这里，我们的第5个示例也就结束了，如果你也一直跟着练习的话。每一个插件都有不同的参数和配置，webpack的插件非常多而且实现各种不同的功能，但我们都在webpack配置文件中<code>plugin</code>数组中对他们进行管理配置。</p>
+
+<p>在github上我们的示例代码中，还有一个关于插件的<code>example6</code>分支。通过插件为webpack提供了JavaScript压缩的功能。但现在来说，这已经不是必须的了，除非你要学习了解一下UglifyJS的一些配置规则。如果你不喜欢UglifyJS的这些默认设置，你可以检出代码，修改<code>webpack.config.js</code>进行自定义设置。但如果这些配置符合你的需求，你可以不再使用<code>UglifyJS</code>插件，你需要做的只是在运行<code>webpack</code>时增加一个<code>-p</code>参数就行了，这个参数是<code>production</code>的缩写，等同于<code>--optimize-minimize</code>和<code>--optimize-occurence-order</code>参数，第一参数压缩JavaScript代码，第二个参数优化模块脚本在包中的顺序，使包的体积更小，执行效率更高。github上面的代码已经有一段时间了，我后面才了解了<code>-p</code>这个参数，所以这里保留了使用了<code>UglifyJS</code>的示例，同时介绍了这个更简单的方法。另外一个可以使用的快捷参数是<code>-d</code>，可以在无需更多配置的情况下，显示更多的webpack的调试信息，并且生成一个映射树。你也可以在<a href="http://webpack.github.io/docs/cli.html">这里</a>查看更多的快捷参数，如果你觉得这样更简单的话。</p>
+
+<h4 id="section-4">分块延迟加载</h4>
+<p>我喜欢RequireJS，而且不能放弃它转为Browserify（虽然现在可能可以了）的原因之一就是——懒加载。一个大体积的JavaScript文件虽然可以减少HTTP请求，但也会造成下载很多不必要的代码。</p>
+
+<p>webpack有一种可以将包拆分为可以延迟加载的块的方法，而且你甚至不需要任何配置。而你需要做的就只是用下面两种方式中的一种书写你的代码，webpack会自动帮你完成后面的事情。webpack提供了两种方案，一种基于CommonJS，另一种基于AMD。使用CommonJS的方式实现延迟加载，你可以像这样写：</p>
+
+<pre class="prettyprint">
+require.ensure(["module-a", "module-b"], function(require) {
+    var a = require("module-a");
+    var b = require("module-b");
+    // …
+});
+</pre>
+
+<p>使用<code>requier-ensure</code>，会确保模块可用（但不会执行它），并传递一个模块名称组成的数组和一个回调函数。想要在回调中实际的使用这些模块，你需要显示的使用传递给回调函数的参数。<br />
+就我个人而言，我觉得这样有些冗长，所以我们看看ADM的方案：</p>
+<pre class="prettyprint">
+require(["module-a", "module-b"], function(a, b) {
+    // …
+});
+</pre>
+<p>使用AMD，你需要使用<code>require</code>，传入一个一拉模块组成的数组和一个回调，回调函数的参数和依赖模块数组的顺序是一样的。</p>
+
+<p>Webpack2 也支持<code>System.import</code>，</p>
 
 
   </article>
