@@ -575,6 +575,7 @@ module.exports = {
 </pre>
 <p>我们在第二行import这个插件，然后<code>entry</code>部分，我们使用了不同的设置，使用了一个对象，来指定多个入口。<code>vendor</code>入口标志着哪些模块将被包含到<code>vendor chunk</code>中，这里我们指定了polyfill和Lodash两个模块。然后我们指定<code>main</code>入口。之后，我们只需要在<code>plugin</code>中简单的配置一下<code>CommonChunkPlugin</code>插件，这里我们指定<code>vendor</code>块作为基础块，并指定将vendor的代码将被储存在一个叫<code>vendor.bundle.js</code>的文件中。</p>
 
+
   </article>
 
 </div>

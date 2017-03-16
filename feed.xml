@@ -6,8 +6,8 @@
 </description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 16 Mar 2017 20:37:00 +0800</pubDate>
-    <lastBuildDate>Thu, 16 Mar 2017 20:37:00 +0800</lastBuildDate>
+    <pubDate>Thu, 16 Mar 2017 20:40:18 +0800</pubDate>
+    <lastBuildDate>Thu, 16 Mar 2017 20:40:18 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -501,6 +501,7 @@ module.exports = {
 };
 &lt;/pre&gt;
 &lt;p&gt;我们在第二行import这个插件，然后&lt;code&gt;entry&lt;/code&gt;部分，我们使用了不同的设置，使用了一个对象，来指定多个入口。&lt;code&gt;vendor&lt;/code&gt;入口标志着哪些模块将被包含到&lt;code&gt;vendor chunk&lt;/code&gt;中，这里我们指定了polyfill和Lodash两个模块。然后我们指定&lt;code&gt;main&lt;/code&gt;入口。之后，我们只需要在&lt;code&gt;plugin&lt;/code&gt;中简单的配置一下&lt;code&gt;CommonChunkPlugin&lt;/code&gt;插件，这里我们指定&lt;code&gt;vendor&lt;/code&gt;块作为基础块，并指定将vendor的代码将被储存在一个叫&lt;code&gt;vendor.bundle.js&lt;/code&gt;的文件中。&lt;/p&gt;
+
 </description>
         <pubDate>Tue, 21 Feb 2017 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/technology/2017/02/21/webpack-%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D-%E7%BF%BB%E8%AF%91.html</link>
