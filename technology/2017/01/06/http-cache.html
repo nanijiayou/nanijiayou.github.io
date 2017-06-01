@@ -11,8 +11,8 @@
   <meta name="keywords" content="http cache http 缓存 nanijiayou nani 简单博客">
 
   <link rel="stylesheet" href="/css/main.css">
-  <link rel="canonical" href="http://localhost:4000/technology/2017/01/06/http-cache.html">
-  <link rel="alternate" type="application/rss+xml" title="nani" href="http://localhost:4000/feed.xml" />
+  <link rel="canonical" href="http://nanijiayou.github.io/technology/2017/01/06/http-cache.html">
+  <link rel="alternate" type="application/rss+xml" title="nani" href="http://nanijiayou.github.io/feed.xml" />
 </head>
 
 
@@ -94,7 +94,7 @@
 我们举一个例子来说明这个过程。<br />
 比如有一天我们要做一份水果沙拉，需要用到牛奶，发现这时手边没有牛奶。这时候我们首先想到的是去冰箱（缓存中）看一看有没有存货，这也就是这里的第一个流程<code>检查命中</code>，如果没有（未命中 cache miss）这时候我们就只能去附近的超市（上一级缓存或是源服务器）从新买一些了，然后放进冰箱以备下次使用。如果发现冰箱有（命中 cache hit）存货的话，我们也不能直接拿来就用对吧，你得检查一下有没有过期呀，不然吃坏肚子怎么办。这就是我们的第二个流程<code>新鲜度检验</code>，怎样进行新鲜度检验呢？很简单看看牛奶盒子上的过期日期不就行了么。想一想我们平时喝的牛奶上的过期信息，无非就两种，一种是直接告诉你过期的日期（比如保质期：2016-10-30），另一种就是告诉你生产日期和保存时间（比如生产日期：2016-10-1，保存时间30天）。虽然最终要表达的结果都差不多，但还是有区别的，区别就是一个是绝对时间一个是相对时间，如果要问哪个好点，应该是相对时间更好。因为使用相对时间包括起始时间，这样我们更准确的控制，而绝对时间需要一个前提，就是时间是统一的，想一想如果你的产品是要出口的话，就会有不同时区问题，你写你当地时区的绝对时间，在其他时区就可能不准了，这样就会出问题，这个服务器中就更为常见了，很多服务器的时钟不统一，有些甚至是错误的，所以我们一般建议使用相对时间。对应于上面的两种过期信息书写方式，我们的http首部中也有相应的指令来指导缓存，对于绝对过期日期，http中有对应的Expires指令，比如：Expires: Thu, 01 Dec 2016 16:00:00 GMT。而对于相对时间http中有cache-control: max-age=6000指令，他表示的就是从服务器将文档传来之时，可以认为文档处于新鲜度的秒数。在对比了过期日期之后，如果是我们的牛奶是新鲜的，这时候我们当然可以直接使用了，不需要再去超市买了，也就是说我们可以直接使用缓存的中的副本了，不用再发请求了，这样就很快了。但如果不新鲜了呢？这里的情况可能就稍有不同了，平时我们发现牛奶不新鲜了，可能就会从新去买了。但这样对于我们来说是最好的方式吗？试想一下，虽然我们的缓存过期了，但这个缓存副本的内容依然和我们源服务器上的内容相同，我们是否有必要从新去拿源服务器上的资源呢？当然不需要了，都一样的为啥还要再拿一遍，更新一下我们缓存副本资源的过期日期不就行了，之后继续使用这个版本嘛。这里我们拿缓存中的副本去和源服务器比较的过程就是第三个流程<code>再验证</code>。如果验证之后，缓存副本和源服务器上的资源不同，这时候我们就可以从新请求资源，放到缓存中了。如果相同，我们只需要更新一下缓存副本的过期日期，继续缓存副本资源。这就是一个缓存的主要流程。下面的流程图中可以看得更清楚。</p>
 
-<p><img src="http://localhost:4000/assets/images/cache-tou.png" alt="setting image" /></p>
+<p><img src="http://nanijiayou.github.io/assets/images/cache-tou.png" alt="setting image" /></p>
 
 <p>总结来说http缓存的全部意义就是提升系统的性能，体现出提升性能的地方主要是后两个阶段：新鲜度检验<code>过期机制</code>可以减少网络请求回路的数量，再验证<code>验证机制</code>则可以减少网络应用请求的带宽。</p>
 
@@ -162,7 +162,7 @@
   </div>
 
 </footer>
-<script type="text/javascript" src="http://localhost:4000/assets/js/prettify.js"></script>
+<script type="text/javascript" src="http://nanijiayou.github.io/assets/js/prettify.js"></script>
 
 
   </body>

@@ -4,10 +4,10 @@
     <title>nani</title>
     <description>我的要博客简单专注有内容。
 </description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 16 Mar 2017 20:40:18 +0800</pubDate>
-    <lastBuildDate>Thu, 16 Mar 2017 20:40:18 +0800</lastBuildDate>
+    <link>http://nanijiayou.github.io/</link>
+    <atom:link href="http://nanijiayou.github.io/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Fri, 19 May 2017 18:44:39 +0800</pubDate>
+    <lastBuildDate>Fri, 19 May 2017 18:44:39 +0800</lastBuildDate>
     <generator>Jekyll v2.5.3</generator>
     
       <item>
@@ -416,7 +416,7 @@ module.exports = {
 };
 &lt;/pre&gt;
 &lt;p&gt;这里的tempalte参数指定模板路径，title参数被传入模板中，如果你运行&lt;code&gt;npm start&lt;/code&gt;，浏览器显示大致如下：
-&lt;img src=&quot;http://localhost:4000/assets/images/temp.png&quot; alt=&quot;html image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;http://nanijiayou.github.io/assets/images/temp.png&quot; alt=&quot;html image&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;到这里，我们的第5个示例也就结束了，如果你也一直跟着练习的话。每一个插件都有不同的参数和配置，webpack的插件非常多而且实现各种不同的功能，但我们都在webpack配置文件中&lt;code&gt;plugin&lt;/code&gt;数组中对他们进行管理配置。&lt;/p&gt;
 
@@ -504,8 +504,8 @@ module.exports = {
 
 </description>
         <pubDate>Tue, 21 Feb 2017 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/technology/2017/02/21/webpack-%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D-%E7%BF%BB%E8%AF%91.html</link>
-        <guid isPermaLink="true">http://localhost:4000/technology/2017/02/21/webpack-%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D-%E7%BF%BB%E8%AF%91.html</guid>
+        <link>http://nanijiayou.github.io/technology/2017/02/21/webpack-%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D-%E7%BF%BB%E8%AF%91.html</link>
+        <guid isPermaLink="true">http://nanijiayou.github.io/technology/2017/02/21/webpack-%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D-%E7%BF%BB%E8%AF%91.html</guid>
         
         <category>github page jekyll</category>
         
@@ -525,14 +525,14 @@ module.exports = {
 我们举一个例子来说明这个过程。&lt;br /&gt;
 比如有一天我们要做一份水果沙拉，需要用到牛奶，发现这时手边没有牛奶。这时候我们首先想到的是去冰箱（缓存中）看一看有没有存货，这也就是这里的第一个流程&lt;code&gt;检查命中&lt;/code&gt;，如果没有（未命中 cache miss）这时候我们就只能去附近的超市（上一级缓存或是源服务器）从新买一些了，然后放进冰箱以备下次使用。如果发现冰箱有（命中 cache hit）存货的话，我们也不能直接拿来就用对吧，你得检查一下有没有过期呀，不然吃坏肚子怎么办。这就是我们的第二个流程&lt;code&gt;新鲜度检验&lt;/code&gt;，怎样进行新鲜度检验呢？很简单看看牛奶盒子上的过期日期不就行了么。想一想我们平时喝的牛奶上的过期信息，无非就两种，一种是直接告诉你过期的日期（比如保质期：2016-10-30），另一种就是告诉你生产日期和保存时间（比如生产日期：2016-10-1，保存时间30天）。虽然最终要表达的结果都差不多，但还是有区别的，区别就是一个是绝对时间一个是相对时间，如果要问哪个好点，应该是相对时间更好。因为使用相对时间包括起始时间，这样我们更准确的控制，而绝对时间需要一个前提，就是时间是统一的，想一想如果你的产品是要出口的话，就会有不同时区问题，你写你当地时区的绝对时间，在其他时区就可能不准了，这样就会出问题，这个服务器中就更为常见了，很多服务器的时钟不统一，有些甚至是错误的，所以我们一般建议使用相对时间。对应于上面的两种过期信息书写方式，我们的http首部中也有相应的指令来指导缓存，对于绝对过期日期，http中有对应的Expires指令，比如：Expires: Thu, 01 Dec 2016 16:00:00 GMT。而对于相对时间http中有cache-control: max-age=6000指令，他表示的就是从服务器将文档传来之时，可以认为文档处于新鲜度的秒数。在对比了过期日期之后，如果是我们的牛奶是新鲜的，这时候我们当然可以直接使用了，不需要再去超市买了，也就是说我们可以直接使用缓存的中的副本了，不用再发请求了，这样就很快了。但如果不新鲜了呢？这里的情况可能就稍有不同了，平时我们发现牛奶不新鲜了，可能就会从新去买了。但这样对于我们来说是最好的方式吗？试想一下，虽然我们的缓存过期了，但这个缓存副本的内容依然和我们源服务器上的内容相同，我们是否有必要从新去拿源服务器上的资源呢？当然不需要了，都一样的为啥还要再拿一遍，更新一下我们缓存副本资源的过期日期不就行了，之后继续使用这个版本嘛。这里我们拿缓存中的副本去和源服务器比较的过程就是第三个流程&lt;code&gt;再验证&lt;/code&gt;。如果验证之后，缓存副本和源服务器上的资源不同，这时候我们就可以从新请求资源，放到缓存中了。如果相同，我们只需要更新一下缓存副本的过期日期，继续缓存副本资源。这就是一个缓存的主要流程。下面的流程图中可以看得更清楚。&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/images/cache-tou.png&quot; alt=&quot;setting image&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://nanijiayou.github.io/assets/images/cache-tou.png&quot; alt=&quot;setting image&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;总结来说http缓存的全部意义就是提升系统的性能，体现出提升性能的地方主要是后两个阶段：新鲜度检验&lt;code&gt;过期机制&lt;/code&gt;可以减少网络请求回路的数量，再验证&lt;code&gt;验证机制&lt;/code&gt;则可以减少网络应用请求的带宽。&lt;/p&gt;
 
 </description>
         <pubDate>Fri, 06 Jan 2017 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/technology/2017/01/06/http-cache.html</link>
-        <guid isPermaLink="true">http://localhost:4000/technology/2017/01/06/http-cache.html</guid>
+        <link>http://nanijiayou.github.io/technology/2017/01/06/http-cache.html</link>
+        <guid isPermaLink="true">http://nanijiayou.github.io/technology/2017/01/06/http-cache.html</guid>
         
         <category>github page jekyll</category>
         
@@ -550,8 +550,8 @@ module.exports = {
 
 </description>
         <pubDate>Fri, 30 Dec 2016 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/technology/2016/12/30/http-https-read-notes.html</link>
-        <guid isPermaLink="true">http://localhost:4000/technology/2016/12/30/http-https-read-notes.html</guid>
+        <link>http://nanijiayou.github.io/technology/2016/12/30/http-https-read-notes.html</link>
+        <guid isPermaLink="true">http://nanijiayou.github.io/technology/2016/12/30/http-https-read-notes.html</guid>
         
         <category>github page jekyll</category>
         
@@ -722,8 +722,74 @@ RenderObject* RenderObject::createObject(Node* node, RenderStyle* style)
 
 </description>
         <pubDate>Tue, 20 Dec 2016 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/technology/2016/12/20/technology-browser-render-principles.html</link>
-        <guid isPermaLink="true">http://localhost:4000/technology/2016/12/20/technology-browser-render-principles.html</guid>
+        <link>http://nanijiayou.github.io/technology/2016/12/20/technology-browser-render-principles.html</link>
+        <guid isPermaLink="true">http://nanijiayou.github.io/technology/2016/12/20/technology-browser-render-principles.html</guid>
+        
+        <category>github page jekyll</category>
+        
+        
+        <category>technology</category>
+        
+      </item>
+    
+      <item>
+        <title>浏览器渲染性能优化</title>
+        <description>&lt;h4 id=&quot;section&quot;&gt;1. 为什么卡顿&lt;/h4&gt;
+&lt;p&gt;浏览器渲染没有处理好的情况下，经常会出现卡顿的情况，尤其是动画效果，可能会出现一顿一顿的情况。这种情况是怎么来的呢？&lt;/p&gt;
+
+&lt;p&gt;为了更好的说明这个问题，这里先说明显示器的刷新频率。这个概念很简单，简单来说就是，每一秒钟显示器画面刷新的次数，也就是每一秒钟显示器能显示多少副图像。这个概念在我们平时的生活中非常常见，比如我们看电影的时候，我们看到的其实是一副一副静止的画面，只是画面切换的间隔很短，我们观察不出来。这里画面之间的切换就是我们所说的画面刷新。同理我们的电视，电脑显示器也是一样的原来。只是电视，显示器的刷新频率要高一些，一般为60Hz。也就是说我们的显示器每一秒钟更新60次画面。&lt;/p&gt;
+
+&lt;p&gt;每一秒钟刷新60次意味着什么呢？也就是说每一帧之间的间隔时间为16毫秒多一点（1s/60 = 16.66ms）。也就意味着原理上浏览器有16.66ms完成每一帧绘制工作。但对于我们来说，这个时间会进一步缩短，因为浏览器本身还需要做许多其他额外的工作，所以留给我们完成所有的工作的时间一般只有10ms。如果你的工作没有在这个时间内完成，那么浏览器就无法绘制出这些帧，也就就无法显示在显示器上，从而出现卡顿。&lt;/p&gt;
+
+&lt;h4 id=&quot;section-1&quot;&gt;2. 浏览器渲染一帧的几个关键步骤&lt;/h4&gt;
+&lt;p&gt;现在知道为什么会出现卡顿，那么如何避免卡顿呢？按照上面的原理，我们需要做的就是在尽量在短的时间内完成每一帧的绘制，所以问题的关键就是如何在规定时间内完成每一帧的绘制。怎样做到这一点呢？首先需要了解浏览器渲染一帧的几个关键节点，尽量减少这几个节点的耗时，从而解决卡顿的问题。&lt;/p&gt;
+
+&lt;p&gt;比如我们有一个动画，它不断修改（通过Js或者css）一个元素的样式。那浏览器如何绘制出下一帧呢，是怎样的过程呢？通常来说有三个步骤：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;重排（reflow）&lt;/strong&gt;&lt;br /&gt;
+ 什么是重排呢？换个说法可能更容易理解一些，重排其实就是重新布局。我们知道浏览器获取到站点数据之后，会先解析HTML生成DOM树（dom tree），然后解析CSS生成样式规则树(style rule tree)，然后解析Javascript（Js可以修改DOM tree和Style rule treee）。最终形成一颗渲染树（render tree）。在第一次渲染出这棵渲染树的时候，就有会产生第一次布局，之后修改元素的某些样式，就会再一次进行布局，也就是重排。重排的主要工作就是：浏览器根据元素的样式规则，计算出元素占用空间的大小以及它在屏幕上的位置。重排是一个很耗费浏览器性能的操作，因为一旦触发重排，浏览器都要重新计算每个元素的形状和位置。修改元素大小（width, height, font-size等）和位置（position）一般都会触发浏览器的重排，这里大家可能对position这个触发重绘有点不好理解，按照平时我们熟悉的css的流的概念，position:absolute，在另外一层上应该不会影响文档流才对。但这里我们只考虑了一个方面，它虽然不影响文档流，但它却依赖文档流，我们的绝对定位依赖直接父级的位置属性，所以当然要进行重排了。要判断属性是否会触发重排主要也看这两点：是否影响文档流，是否依赖文档流。按照这个规则我们很容易判断其他的样式属性是否会引起重排，比如position:fixed，按照我们的规则，就不会引起重排。具体有哪些样式会触发重排可以查看&lt;a href=&quot;https://csstriggers.com/&quot;&gt;这里&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;重绘（repaint）&lt;/strong&gt;&lt;br /&gt;
+ 重绘也很容易理解，就是重新绘制的意思。主要就是一个填充像素的过程，它涉及文本，颜色，阴影，图像等。就是浏览器在知道元素的大小和位置之后，按照给定的文本，颜色，阴影，图像等将元素绘制出来。比如color，background等这些属性的修改，就会触发浏览器的重绘。绘制一般是在多个图层上进行的，和PS里图层的概念差不多。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;合成（composite）&lt;/strong&gt;&lt;/p&gt;
+
+    &lt;p&gt;正如上面所说的页面的各个部分是绘制在多个图层上的，最后会有一个合并渲染层的过程，就是将它们按照正确的顺序绘制到屏幕上，最终显示在我们的显示屏上。&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;当然不是每一次都需要执行这三个步骤，你可以跳过其中的一些步骤。但你执行其中一个步骤，后面的肯定会执行，意思就是你触发了重排，就一定会产生重绘和合成。触发了重绘就会发生合并，合并也是一定会发生的。所以为了我们能在规定时间内完成绘制，我们就需要尽可能的跳过或是减少重排和重绘的过程，减少这些对性能影响很大的计算。那么如何尽量减少呢？其实浏览器内部本身就针对这些做了很多优化，比如浏览器就会将reflow和repaint的操作累计一些之后再做composite。我们就应该尽量减少一些操作强制触发浏览的reflow。具体有哪些操作会强制触发reflow，可以参考&lt;a href=&quot;http://gent.ilcore.com/2011/03/how-not-to-trigger-layout-in-webkit.html&quot;&gt;&lt;strong&gt;这里&lt;/strong&gt;&lt;/a&gt;。下面有一些常规的建议。&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;尽量减少使用js对dom进行一条一条的样式修改，可以使用修改classname的方法。&lt;/li&gt;
+  &lt;li&gt;批量的对DOM进行修改，不要循环一次一次的修改。&lt;/li&gt;
+  &lt;li&gt;尽量不要使用table进行布局。&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;动画可以尽量用transform和opacity实现，这两个属性的修改之后引起composite。详细可以查看&lt;a href=&quot;https://csstriggers.com/&quot;&gt;&lt;strong&gt;css trigger&lt;/strong&gt;&lt;/a&gt;和&lt;a href=&quot;https://aerotwist.com/blog/flip-your-animations/&quot;&gt;&lt;strong&gt;FLIP原则&lt;/strong&gt;&lt;/a&gt;。&lt;/p&gt;
+
+    &lt;p&gt;比起前两个过程，合并过程耗费浏览器的性能要小得多，。现代浏览器还可以使用GPU(图形处理器)来加速这一过程。如何来开启GPU加速呢？其实就是为元素添加一些规则将其提升为独立的层，具体有：&lt;/p&gt;
+
+    &lt;ul&gt;
+      &lt;li&gt;使用3D和透视变换（transform，perspective）。&lt;/li&gt;
+      &lt;li&gt;拥有3D或2D上下文的元素(WebGL，canvas，video等)。&lt;/li&gt;
+      &lt;li&gt;混合插件(flash)。&lt;/li&gt;
+      &lt;li&gt;2D变换和透明度样式(transform，opactiy)。&lt;/li&gt;
+      &lt;li&gt;使用will-change属性。&lt;/li&gt;
+      &lt;li&gt;使用css过滤器(filter)。&lt;/li&gt;
+      &lt;li&gt;元素A有一个 z-index 比自己小的元素B，且元素B是一个合成层（换句话说就是该元素在复合层上面渲染），则元素A会提升为合成层。&lt;/li&gt;
+    &lt;/ul&gt;
+
+    &lt;p&gt;GPU擅长大规模的并行计算，也就是我们说的人海战术，处理图像数据非常酷快，所以使用GPU进行图层的合并会使你的动画效果变得非常流畅，而且相对独立于CPU，JavaScript计算对对图像产生的影响就很小，也就是说即时在动画过程中，你还有大量的js计算，动画也依然能保持流畅。这样看来使用GPU的方案非常完美，那我是不是任何元素都单独出一个图层，这样是不是出图也快呢？当然不是这样的，了解一下GPU你就知道，GPU只有很少的cache，而且图层数据需要传给GPU，就像我们的网络请求一样。而我们每一个&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Mon, 15 Feb 2016 00:00:00 +0800</pubDate>
+        <link>http://nanijiayou.github.io/technology/2016/02/15/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.html</link>
+        <guid isPermaLink="true">http://nanijiayou.github.io/technology/2016/02/15/%E6%B5%8F%E8%A7%88%E5%99%A8%E6%B8%B2%E6%9F%93%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96.html</guid>
         
         <category>github page jekyll</category>
         
@@ -746,7 +812,7 @@ RenderObject* RenderObject::createObject(Node* node, RenderStyle* style)
 
 &lt;p&gt;&lt;strong&gt;github新建仓库：&lt;/strong&gt;既然要利用githug的page搭建博客，当然先要让github分配一个可访问的域名了，具体步骤就是登录你github -&amp;gt; New repository：具体可以看下图：&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/assets/images/setting.png&quot; alt=&quot;setting image&quot; /&gt;
+&lt;p&gt;&lt;img src=&quot;http://nanijiayou.github.io/assets/images/setting.png&quot; alt=&quot;setting image&quot; /&gt;
 这里需要注意的是，域名的形式是&lt;strong&gt;username.github.io&lt;/strong&gt;这里的username要和你github的帐户名相同，因为一个用户只能拥有一个这样的域名的，如果不一致的话，是无法访问的！&lt;/p&gt;
 
 &lt;blockquote&gt;
@@ -809,7 +875,7 @@ $ jekyll serve --force_polling
 #次改动都要启动serve
 &lt;/pre&gt;
 &lt;p&gt;现在可以你打开http://localhost:4000,应该就可以一个初始的jekyll博客了 &lt;br /&gt;
-&lt;img src=&quot;http://localhost:4000/assets/images/initial.png&quot; alt=&quot;setting image&quot; /&gt;
+&lt;img src=&quot;http://nanijiayou.github.io/assets/images/initial.png&quot; alt=&quot;setting image&quot; /&gt;
 当然这也是可以的，但这样会然人觉得缺少一个开发环境，因为改动和提交都在这里，特别是刚开始的去改博客内容时，改动很多，最后想还原也很麻烦；另外一点是，如果你看过jekyll介绍，你会发现jekyll所有最后生成的页面其实都放在_site这个文件中,所以你根本不用把所有文件都放到你的username.github.io仓库中，毕竟github只有300M免费空间。&lt;/p&gt;
 
 &lt;p&gt;正如上面说的，应该有一个开发环境，并且只提交自动生成的博客页面，及_site目录下的文件&lt;br /&gt;
@@ -846,14 +912,14 @@ $ jekyll build
    ....
 &lt;/pre&gt;
 &lt;p&gt;贴一张图可能看的更清楚，&lt;em&gt;里面的music，movie之类的文件夹是我自己的分类&lt;/em&gt;
-&lt;img src=&quot;http://localhost:4000/assets/images/list.png&quot; alt=&quot;setting image&quot; /&gt;&lt;/p&gt;
+&lt;img src=&quot;http://nanijiayou.github.io/assets/images/list.png&quot; alt=&quot;setting image&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;接下来你就可以放心的在本地测开测试，待一切都OK之后，去username.github.io下提交，然后线上也和你本地一样了！&lt;/p&gt;
 
 </description>
         <pubDate>Tue, 05 May 2015 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/technology/2015/05/05/how-to-setup-blog-use-jekyll.html</link>
-        <guid isPermaLink="true">http://localhost:4000/technology/2015/05/05/how-to-setup-blog-use-jekyll.html</guid>
+        <link>http://nanijiayou.github.io/technology/2015/05/05/how-to-setup-blog-use-jekyll.html</link>
+        <guid isPermaLink="true">http://nanijiayou.github.io/technology/2015/05/05/how-to-setup-blog-use-jekyll.html</guid>
         
         <category>github page jekyll</category>
         
